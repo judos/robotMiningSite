@@ -1,0 +1,2 @@
+addTechnologyUnlocksRecipe("construction-robotics","robotMiningSite")
+

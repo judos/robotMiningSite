@@ -1,0 +1,9 @@
+{
+  "name": "robotMiningSite",
+  "version": "0.1.0",
+  "title": "Robot Mining Site",
+  "author": "judos",
+  "description": "Adds a building which delegates construction robots for mining resources",
+	"dependencies": ["base >= 0.12.11"],
+	"homepage": "https://github.com/judos/robotMiningSite"
+}
