@@ -5,9 +5,9 @@ data:extend({
 		icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
 		place_result = "robotMiningSite",
 		flags = {"goes-to-quickbar"},
-    subgroup = "defensive-structure",
+    subgroup = "logistic-network",
+    order = "c[signal]-b[robotMiningSite]",
 		category = "crafting",
-		order = "0",
 		stack_size = 50,
 	},
 })
