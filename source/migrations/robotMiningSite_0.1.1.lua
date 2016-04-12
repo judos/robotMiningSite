@@ -3,7 +3,7 @@ for i, force in pairs(game.forces) do
 	force.reset_recipes()
 	
 	-- technology unlocking migration:
-	if force.technologies["rocket-silo"].researched then
-		force.recipes["rocketAutoStarter"].enabled = true
+	if force.technologies["construction-robotics"].researched then
+		force.recipes["robotMiningSite"].enabled = true
 	end
 end
