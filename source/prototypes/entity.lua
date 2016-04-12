@@ -1,3 +1,5 @@
+require "sharedCode.functions"
+
 data:extend({
  {
     type = "container",
@@ -15,11 +17,12 @@ data:extend({
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
     picture =
     {
-      filename = "__robotMiningSite__/graphics/entity/robotMiningSite.png",
+      filename = "__robotMiningSite__/graphics/entity/robotMiningSite-area.png",
 			priority = "extra-high",
-      width = 136,
-			height = 132,
-			shift = {0.875, -1},
+      width = 672,
+			height = 672,
+			shift = {0, 0},
     },
+		order = "c[signal]-b[robotMiningSiteArea]"
   },
 })
