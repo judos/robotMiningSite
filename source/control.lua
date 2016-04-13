@@ -133,6 +133,7 @@ function runEntityInstructions(idOfEntity, entity)
 	local network = entity.surface.find_logistic_network_by_position(entity.position,entity.force)
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local robots = network.available_construction_robots
+	robots = math.max(robots-9,0)
 	if not robots then return updateEveryTicksWaiting,"no robots available" end
 	
 	local r = 10 --range
