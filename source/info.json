@@ -1,6 +1,6 @@
 {
   "name": "robotMiningSite",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "title": "Robot Mining Site",
   "author": "judos",
   "description": "Adds a building which delegates construction robots for mining resources",
