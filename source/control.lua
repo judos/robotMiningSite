@@ -149,26 +149,39 @@ function runEntityInstructions(idOfEntity, entity)
 	local energyRoboport = networkCell.owner
 	if not energyRoboport then return updateEveryTicksWaiting,"no roboport found" end
 	
+	local detectCollision = {}
 	for i=1,robots do
-		if energyRoboport.energy >= energyPerMining then
-			energyRoboport.energy = energyRoboport.energy - energyPerMining
-		else
-			return updateEveryTicksWaiting,"roboport has no energy"
-		end
 		local n = math.random(#resources)
 		local stack = {name=resources[n].name,count=1}
 		local position = resources[n].position
-		if resources[n].amount>1 then
-			resources[n].amount = resources[n].amount - 1
-		else
-			resources[n].destroy()
-			table.remove(resources,n)
-			if #resources==0 then break end
-		end
 		
-		local itemEntity = entity.surface.create_entity{stack=stack,position=position,name="item-on-ground"}
-		if itemEntity then
-			itemEntity.order_deconstruction(entity.force)
+		-- check collision with other entities
+		if not detectCollision[position.x] then detectCollision[position.x]={} end
+		if not detectCollision[position.x][position.y] then
+			local area = {{math.floor(position.x),math.floor(position.y)},{math.ceil(position.x),math.ceil(position.y)}}
+			local count = entity.surface.count_entities_filtered{area=area}
+			detectCollision[position.x][position.y] = count
+		end
+		if detectCollision[position.x][position.y] == 1 then
+		
+			if energyRoboport.energy >= energyPerMining then
+				energyRoboport.energy = energyRoboport.energy - energyPerMining
+			else
+				return updateEveryTicksWaiting,"roboport has no energy"
+			end
+			if resources[n].amount>1 then
+				resources[n].amount = resources[n].amount - 1
+			else
+				resources[n].destroy()
+				table.remove(resources,n)
+				if #resources==0 then break end
+			end
+			
+			local itemEntity = entity.surface.create_entity{stack=stack,position=position,name="item-on-ground"}
+			detectCollision[position.x][position.y]=detectCollision[position.x][position.y]+1
+			if itemEntity and itemEntity.valid then
+				itemEntity.order_deconstruction(entity.force)
+			end
 		end
 	end
 	
