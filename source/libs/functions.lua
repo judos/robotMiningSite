@@ -1,5 +1,5 @@
-require "sharedCode.logging"
-require "sharedCode.basic-lua-extensions"
+require "libs.logging"
+require "libs.basic-lua-extensions"
 
 -- adds a recipe which is unlocked when the given technology is researched
 function addTechnologyUnlocksRecipe(technologyName, recipeName)

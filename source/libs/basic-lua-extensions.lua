@@ -25,26 +25,3 @@ function deepcopy(orig)
     end
     return copy
 end
-
----------------------------------------------------
--- Debug Functions
----------------------------------------------------
-
-function debug(message)
-	if debug_master then
-		if type(message) ~= "string" then
-			message = serpent.block(message)
-		end
-		print(message)
-	end
-end
-
-function playerPrint(message)
-	if not game then
-		debug(message)
-		return
-	end
-	for _,player in pairs(game.players) do
-		player.print(message)
-	end
-end

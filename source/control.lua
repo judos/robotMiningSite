@@ -1,6 +1,6 @@
 require "defines"
 require "config"
-require "sharedCode.functions"
+require "libs.functions"
 
 local entityName = "robotMiningSite"
 
@@ -80,7 +80,7 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 end)
 
 function entityBuilt(entity)
-	debug("Entity built in tick "..game.tick.." and added it for update tick")
+	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 end
 

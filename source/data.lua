@@ -1,7 +1,5 @@
 require("config")
-
-require("sharedCode.basic-lua-extensions")
-require("sharedCode.functions")
+require("libs.functions")
 
 require("prototypes.entity")
 require("prototypes.items")
