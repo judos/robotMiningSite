@@ -13,3 +13,9 @@ function addTechnologyUnlocksRecipe(technologyName, recipeName)
 		end
 	end
 end
+
+function overwriteContent(originalTable,newContent)
+	for k,d in pairs(newContent) do
+		originalTable[k]=d
+	end
+end

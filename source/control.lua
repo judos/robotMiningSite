@@ -1,9 +1,13 @@
 require "defines"
 require "config"
 require "libs.functions"
+require "libs.controlFunctions"
 require "control.robotMiningSite"
+require "control.miningRobot"
+require "control.forces"
 
 local robotMiningSiteName = "robotMiningSite"
+local miningRobot = "mining-robot"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick] = { entity, ... }
@@ -49,8 +53,9 @@ script.on_event(defines.events.on_tick, function(event)
 	end
 	for _,entity in pairs(global.robotMiningSite.schedule[game.tick]) do
 		if entity and entity.valid then
+			local data = global.robotMiningSite.entityData[idOfEntity(entity)]
 			if entity.name == robotMiningSiteName then
-				local nextUpdateInXTicks, reasonMessage = runMiningSiteInstructions(entity)
+				local nextUpdateInXTicks, reasonMessage = runMiningSiteInstructions(entity,data)
 				if reasonMessage then
 					info(robotMiningSiteName.." at " .. entity.position.x .. ", " ..entity.position.y .. ": "..reasonMessage)
 				end
@@ -63,7 +68,7 @@ script.on_event(defines.events.on_tick, function(event)
 			end
 		else
 			warn("updating entity failed:")
-			warn(tostring(entity).." isValid="..tostring(entity.valid))
+			warn(tostring(serpent.block(entity)).." isValid="..tostring(entity.valid))
 			-- if entity was removed, remove it from memory
 			-- nothing to be done here, the entity will just not be scheduled anymore
 		end
@@ -82,9 +87,15 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 end)
 
 function entityBuilt(event)
-	if event.created_entity.name == robotMiningSiteName then
-		miningSiteWasBuilt(event.created_entity)
+	local entity = event.created_entity
+	local name = entity.name
+	local data = nil
+	if name == robotMiningSiteName then
+		data = miningSiteWasBuilt(entity)
+	elseif name == miningRobot then
+		miningRobotWasBuilt(entity)
 	end
+	if data then global.robotMiningSite.entityData[idOfEntity(entity)]=data end
 end
 
 ---------------------------------------------------

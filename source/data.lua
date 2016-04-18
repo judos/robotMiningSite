@@ -1,9 +1,10 @@
-require("config")
-require("libs.functions")
+require "config"
+require "libs.functions"
 
-require("prototypes.entity")
-require("prototypes.items")
-require("prototypes.recipe")
-require("prototypes.technology")
+require "prototypes.entity"
+require "prototypes.items"
+require "prototypes.recipe"
+require "prototypes.technology"
 
-require("prototypes.miningRobot")
+require "prototypes.miningRoboport"
+require "prototypes.miningRobot"

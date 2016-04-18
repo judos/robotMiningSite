@@ -1,3 +1,11 @@
+function string.starts(str,prefix)
+   return string.sub(str,1,string.len(prefix))==prefix
+end
+
+function string.ends(str,suffix)
+   return suffix=='' or string.sub(str,-string.len(suffix))==suffix
+end
+
 function round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult

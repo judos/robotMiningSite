@@ -2,15 +2,26 @@
 function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
+	
+	local pos = {x = entity.position.x-1, y=entity.position.y}
+	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
+	local pos = {x = entity.position.x-1, y=entity.position.y-2}
+	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
+	
+	return {
+		miningRoboport = miningRoboport,
+		storageChest = storageChest
+	}
 end
 
 -- parameters: entity
 -- return values: tickDelayForNextUpdate, reasonMessage
-function runMiningSiteInstructions(entity)
-	local network = entity.surface.find_logistic_network_by_position(entity.position,entity.force)
+function runMiningSiteInstructions(entity,data)
+	local forceName = miningForceFor(entity)
+	local network = data.miningRoboport.logistic_network
+	
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local robots = network.available_construction_robots
-	robots = math.max(robots-9,0)
 	if not robots then return updateEveryTicksWaiting,"no robots available" end
 	
 	local r = 10 --range
@@ -21,9 +32,7 @@ function runMiningSiteInstructions(entity)
 		return updateEveryTicksWaiting,"no resources available"
 	end
 	
-	local networkCell = network.find_cell_closest_to(entity.position)
-	if not networkCell then return updateEveryTicksWaiting,"no network cell" end
-	local energyRoboport = networkCell.owner
+	local energyRoboport = data.miningRoboport
 	if not energyRoboport then return updateEveryTicksWaiting,"no roboport found" end
 	
 	local detectCollision = {}
@@ -57,7 +66,7 @@ function runMiningSiteInstructions(entity)
 				local itemEntity = entity.surface.create_entity{stack=stack,position=position,name="item-on-ground"}
 				detectCollision[position.x][position.y]=detectCollision[position.x][position.y]+1
 				if itemEntity and itemEntity.valid then
-					itemEntity.order_deconstruction(entity.force)
+					itemEntity.order_deconstruction(forceName)
 				end
 			end
 		end
