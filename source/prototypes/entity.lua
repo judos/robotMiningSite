@@ -17,11 +17,11 @@ data:extend({
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
     picture =
     {
-      filename = "__robotMiningSite__/graphics/entity/robotMiningSite-area.png",
+      filename = "__robotMiningSite__/graphics/entity/robotMiningSite.png",
 			priority = "extra-high",
-      width = 672,
-			height = 672,
-			shift = {0, 0},
+			width = 136,
+			height = 132,
+			shift = {0.875, -1}
     },
 		order = "c[signal]-b[robotMiningSiteArea]"
   },
