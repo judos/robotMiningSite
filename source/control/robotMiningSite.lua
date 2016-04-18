@@ -19,59 +19,43 @@ end
 -- parameters: entity
 -- return values: tickDelayForNextUpdate, reasonMessage
 function runMiningSiteInstructions(entity,data)
-	local forceName = miningForceFor(entity)
-	local network = data.miningRoboport.logistic_network
-	
-	if not network then	return updateEveryTicksWaiting,"no logistics network" end
-	local robots = network.available_construction_robots
-	warn("available robots: "..robots)
-	if not robots or robots==0 then return updateEveryTicksWaiting,"no robots available" end
-	
 	local r = 10 --range
 	local p = entity.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
-	local resources = entity.surface.find_entities_filtered{area = searchArea, type="resource"}
+	local resources = entity.surface.find_entities_filtered{type="resource", area = searchArea}
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
 	end
 	
-	local energyRoboport = data.miningRoboport
-	if not energyRoboport then return updateEveryTicksWaiting,"no roboport found" end
+	local network = data.miningRoboport.logistic_network
+	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	
-	local detectCollision = {}
+	local robots = network.available_construction_robots
+	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
+	
 	for i=1,robots+2 do
 		local n = math.random(#resources)
 		local stack = {name=resources[n].name,count=1}
 		local position = resources[n].position
 		if stack.name then
-			-- check collision with other entities
-			if not detectCollision[position.x] then detectCollision[position.x]={} end
-			if not detectCollision[position.x][position.y] then
-				local area = {{math.floor(position.x),math.floor(position.y)},{math.ceil(position.x),math.ceil(position.y)}}
-				local count = entity.surface.count_entities_filtered{area=area}
-				detectCollision[position.x][position.y] = count
-			end
-			if detectCollision[position.x][position.y] == 1 then
-			
-				if energyRoboport.energy >= energyPerMining then
-					energyRoboport.energy = energyRoboport.energy - energyPerMining
-				else
-					return updateEveryTicksWaiting,"roboport has no energy"
-				end
+			-- check if mining is unobstructed
+			if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=stack} then
 				if resources[n].amount>1 then
 					resources[n].amount = resources[n].amount - 1
 				else
 					resources[n].destroy()
-					table.remove(resources,n)
-					if #resources==0 then break end
 				end
 				
-				local itemEntity = entity.surface.create_entity{stack=stack,position=position,name="item-on-ground"}
-				detectCollision[position.x][position.y]=detectCollision[position.x][position.y]+1
+				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=stack}
 				if itemEntity and itemEntity.valid then
+					local forceName = miningForceFor(entity)
 					itemEntity.order_deconstruction(forceName)
 				end
 			end
+			table.remove(resources,n)
+			if #resources==0 then break end
+		else
+			warn("stack.name is nil for position: "..serpent.block(position).." and resource: "..serpent.block(resources[n]))
 		end
 	end
 	
