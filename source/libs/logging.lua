@@ -1,4 +1,4 @@
-debug_master = false -- Master switch for debugging, prints debug stuff into the shell where factorio was started from
+debug_master = true -- Master switch for debugging, prints debug stuff into the shell where factorio was started from
 debug_level = 1 -- 1=info 2=warning 3=error
 
 function info(message)
