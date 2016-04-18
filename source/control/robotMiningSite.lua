@@ -5,8 +5,10 @@ function miningSiteWasBuilt(entity)
 	
 	local pos = {x = entity.position.x-1, y=entity.position.y}
 	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
+	storageChest.operable = false
 	local pos = {x = entity.position.x-1, y=entity.position.y-2}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
+	miningRoboport.operable = false
 	
 	return {
 		miningRoboport = miningRoboport,
@@ -22,7 +24,8 @@ function runMiningSiteInstructions(entity,data)
 	
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local robots = network.available_construction_robots
-	if not robots then return updateEveryTicksWaiting,"no robots available" end
+	warn("available robots: "..robots)
+	if not robots or robots==0 then return updateEveryTicksWaiting,"no robots available" end
 	
 	local r = 10 --range
 	local p = entity.position
@@ -36,7 +39,7 @@ function runMiningSiteInstructions(entity,data)
 	if not energyRoboport then return updateEveryTicksWaiting,"no roboport found" end
 	
 	local detectCollision = {}
-	for i=1,robots do
+	for i=1,robots+2 do
 		local n = math.random(#resources)
 		local stack = {name=resources[n].name,count=1}
 		local position = resources[n].position
