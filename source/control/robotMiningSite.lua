@@ -3,16 +3,17 @@ function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
-	local pos = {x = entity.position.x, y=entity.position.y+1}
-	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
-	storageChest.operable = false
-	storageChest.minable = false
-	storageChest.destructible = false
 	local pos = {x = entity.position.x, y=entity.position.y-0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
 	miningRoboport.operable = false
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
+	
+	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
+	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
+	storageChest.operable = false
+	storageChest.minable = false
+	storageChest.destructible = false
 	
 	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
 	local providerChest = entity.surface.create_entity({name="logistic-chest-passive-provider",position=pos,force=entity.force})
@@ -29,28 +30,20 @@ end
 function moveItemsToPassiveProvider(entity,data)
 	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
 	local invTarget = data.providerChest.get_inventory(defines.inventory.chest)
-	for itemName,count in pairs(invSource.get_contents()) do
-		local stack={name=itemName,count=count}
-		if invTarget.can_insert(stack) then
-			stack.count = invSource.remove(stack)
-			invTarget.insert(stack)
-		else
-			return false -- stop mining, chest is full
-		end
-	end
-	return true -- space left, continue mining
+	return moveInventoryToInventory(invSource,invTarget)
 end
 
 -- parameters: entity
 -- return values: tickDelayForNextUpdate, reasonMessage
 function runMiningSiteInstructions(entity,data)
 	local spaceLeft = moveItemsToPassiveProvider(entity,data)
-	if not spaceLeft then
+	if not spaceLeft then -- stop mining if chest is full
 		return updateEveryTicksWaiting,"no space in chest left"
 	end
+
 	local r = 10 --range
 	local p = entity.position
-	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
+	local searchArea = {{p.x - r, p.y - r -0.5}, {p.x + r, p.y + r -0.5}}
 	local resources = entity.surface.find_entities_filtered{type="resource", area = searchArea}
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
@@ -89,4 +82,47 @@ function runMiningSiteInstructions(entity,data)
 	end
 	
 	return updateEveryTicks,"working..."
+end
+
+
+function preMineRobotMiningSite(event)
+-- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
+	local entity = event.entity
+	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
+	local entityInv = entity.get_inventory(defines.inventory.chest)
+	local data = global.robotMiningSite.entityData[idOfEntity(entity)]
+	
+	-- Move items from chests into robot mining site (player or bots pick them up)
+	local inventoriesToClear = {
+		data.miningRoboport.get_inventory(1),
+		data.storageChest.get_inventory(defines.inventory.chest), 
+		data.providerChest.get_inventory(defines.inventory.chest)
+	}
+	for _,invToClear in pairs(inventoriesToClear) do
+		if not moveInventoryToInventory(invToClear,entityInv) then
+			break
+		end
+	end
+	
+	-- since the player mines it all items have to be moved
+	if event.player_index then
+		-- if playerIndex is set in events table, every item must be moved in this method from the input chests, otherwise items get lost
+		local p = game.players[event.player_index]
+		local playerInventory = p.get_inventory(defines.inventory.player_main)
+		for _,invToClear in pairs(inventoriesToClear) do
+			if not moveInventoryToInventory(invToClear,entityInv) then break end
+		end
+		for _,invToClear in pairs(inventoriesToClear) do
+			if not invToClear.is_empty() then
+				spillInventory(invToClear, entity.surface, entity.position)
+			end
+		end
+	end
+end
+
+
+function removeMiningSite(idEntity,data)
+	data.miningRoboport.destroy()
+	data.storageChest.destroy()
+	data.providerChest.destroy()
 end

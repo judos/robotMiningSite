@@ -7,11 +7,11 @@ require "control.miningRobot"
 require "control.forces"
 
 local robotMiningSiteName = "robotMiningSite"
-local miningRobot = "mining-robot"
+local miningRobotName = "mining-robot"
 
 -- global data stored and used:
--- global.robotMiningSite.schedule[tick] = { entity, ... }
--- global.robotMiningSite.entityData[idEntity] = { name="NAME" }
+-- global.robotMiningSite.schedule[tick][idEntity] = $entity
+-- global.robotMiningSite.entityData[idEntity] = { name=$name, ... }
 
 ---------------------------------------------------
 -- Loading
@@ -40,6 +40,7 @@ function onLoad()
 	if not d.schedule then
 		d.schedule = {}
 	end
+	if not d.schedule then d.schedule = {} end
 	if not d.entityData then d.entityData={} end
 end
 
@@ -51,7 +52,7 @@ script.on_event(defines.events.on_tick, function(event)
 	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
 		return
 	end
-	for _,entity in pairs(global.robotMiningSite.schedule[game.tick]) do
+	for entityId,entity in pairs(global.robotMiningSite.schedule[game.tick]) do
 		if entity and entity.valid then
 			local data = global.robotMiningSite.entityData[idOfEntity(entity)]
 			if entity.name == robotMiningSiteName then
@@ -66,11 +67,16 @@ script.on_event(defines.events.on_tick, function(event)
 					-- nothing to be done here, the entity will just not be scheduled anymore
 				end
 			end
+		elseif entityId == "text" then
+			PlayerPrint(entity)
 		else
-			warn("updating entity failed:")
-			warn(tostring(serpent.block(entity)).." isValid="..tostring(entity.valid))
 			-- if entity was removed, remove it from memory
-			-- nothing to be done here, the entity will just not be scheduled anymore
+			info("removing entity at: "..entityId)
+			local data = global.robotMiningSite.entityData[entityId]
+			if data.name == robotMiningSiteName then
+				removeMiningSite(entityId,data)
+			end
+
 		end
 	end
 	global.robotMiningSite.schedule[game.tick] = nil
@@ -89,13 +95,40 @@ end)
 function entityBuilt(event)
 	local entity = event.created_entity
 	local name = entity.name
-	local data = nil
+	
+	local knownEntities = table.set({robotMiningSiteName,miningRobotName})
+	if not knownEntities[name] then
+		return
+	end
+	
+	local data=nil
 	if name == robotMiningSiteName then
 		data = miningSiteWasBuilt(entity)
-	elseif name == miningRobot then
+	elseif name == miningRobotName then
 		miningRobotWasBuilt(entity)
 	end
-	if data then global.robotMiningSite.entityData[idOfEntity(entity)]=data end
+	if data then 
+		global.robotMiningSite.entityData[idOfEntity(entity)] = { ["name"] = name }
+		table.addTable(global.robotMiningSite.entityData[idOfEntity(entity)],data)
+	end
+end
+
+---------------------------------------------------
+-- Removing entities
+---------------------------------------------------
+script.on_event(defines.events.on_robot_pre_mined, function(event)
+	preMined(event)
+end)
+
+script.on_event(defines.events.on_preplayer_mined_item, function(event)
+	preMined(event)
+end)
+
+function preMined(event) --event table doesn't contain player_index when a robot mines the entity
+	local entity = event.entity
+	if entity.name == robotMiningSiteName then
+		preMineRobotMiningSite(event)
+	end
 end
 
 ---------------------------------------------------
@@ -106,5 +139,5 @@ function scheduleAdd(entity, nextTick)
 	if global.robotMiningSite.schedule[nextTick] == nil then
 		global.robotMiningSite.schedule[nextTick] = {}
 	end
-	table.insert(global.robotMiningSite.schedule[nextTick],entity)
+	global.robotMiningSite.schedule[nextTick][idOfEntity(entity)]=entity
 end

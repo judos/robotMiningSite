@@ -11,6 +11,7 @@ miningRobot.max_energy = "600kJ"
 miningRobot.energy_per_tick = "0.01kJ"
 miningRobot.speed_multiplier_when_out_of_energy = 0.5
 miningRobot.energy_per_move = "3kJ"
+miningRobot.minable.result = "mining-robot"
 data:extend({miningRobot})
 
 -- Recipe

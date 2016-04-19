@@ -1,6 +1,11 @@
 - removal of mining site
-- chest where items can be fetched
+  - player
+	- robots
+	- destruction
 
+- test migration
+- different sizes of mining site
+- logistic condition for mining site
 
 /c game.player.print(serpent.block(game.player.selected.position))
 /c game.player.insert{name="robotMiningSite",count=5}

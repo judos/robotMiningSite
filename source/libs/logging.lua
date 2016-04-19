@@ -21,14 +21,12 @@ function _debug(message,level)
 	end
 end
 
-local printIndex = 1
 function PlayerPrint(message)
 	if not game then
 		_debug(message)
 		return
 	end
 	for _,player in pairs(game.players) do
-		player.print(printIndex.." "..message)
-		printIndex = printIndex + 1
+		player.print(message)
 	end
 end
