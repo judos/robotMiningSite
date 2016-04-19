@@ -3,22 +3,51 @@ function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
-	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
+	local pos = {x = entity.position.x, y=entity.position.y+1}
 	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
 	storageChest.operable = false
+	storageChest.minable = false
+	storageChest.destructible = false
 	local pos = {x = entity.position.x, y=entity.position.y-0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
 	miningRoboport.operable = false
+	miningRoboport.minable = false
+	miningRoboport.destructible = false
+	
+	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
+	local providerChest = entity.surface.create_entity({name="logistic-chest-passive-provider",position=pos,force=entity.force})
+	providerChest.minable = false
+	providerChest.destructible = false
 	
 	return {
 		miningRoboport = miningRoboport,
-		storageChest = storageChest
+		storageChest = storageChest,
+		providerChest = providerChest
 	}
+end
+
+function moveItemsToPassiveProvider(entity,data)
+	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
+	local invTarget = data.providerChest.get_inventory(defines.inventory.chest)
+	for itemName,count in pairs(invSource.get_contents()) do
+		local stack={name=itemName,count=count}
+		if invTarget.can_insert(stack) then
+			stack.count = invSource.remove(stack)
+			invTarget.insert(stack)
+		else
+			return false -- stop mining, chest is full
+		end
+	end
+	return true -- space left, continue mining
 end
 
 -- parameters: entity
 -- return values: tickDelayForNextUpdate, reasonMessage
 function runMiningSiteInstructions(entity,data)
+	local spaceLeft = moveItemsToPassiveProvider(entity,data)
+	if not spaceLeft then
+		return updateEveryTicksWaiting,"no space in chest left"
+	end
 	local r = 10 --range
 	local p = entity.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
