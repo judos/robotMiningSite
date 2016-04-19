@@ -5,6 +5,7 @@ require "libs.controlFunctions"
 require "control.robotMiningSite"
 require "control.miningRobot"
 require "control.forces"
+require "control.migration_0_2_0"
 
 local robotMiningSiteName = "robotMiningSite"
 local miningRobotName = "mining-robot"
@@ -34,11 +35,7 @@ function onLoad()
 	if not d then
 		d = {}
 		global.robotMiningSite = d
-		d.version = "0.1.0"
-		d.schedule = {}
-	end
-	if not d.schedule then
-		d.schedule = {}
+		d.version = "0.2.0"
 	end
 	if not d.schedule then d.schedule = {} end
 	if not d.entityData then d.entityData={} end
@@ -48,6 +45,8 @@ end
 -- Tick
 ---------------------------------------------------
 script.on_event(defines.events.on_tick, function(event)
+	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
+	
   -- if no updates are scheduled return
 	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
 		return
