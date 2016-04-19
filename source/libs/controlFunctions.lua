@@ -29,8 +29,8 @@ end
 
 
 function spillInventory(inventory, surface, position)
-	for i=1,#invSource do
-		local stack = invSource[i]
+	for i=1,#inventory do
+		local stack = inventory[i]
 		if stack and stack.valid and stack.valid_for_read then
 			surface.spill_item_stack(position,stack)
 		end

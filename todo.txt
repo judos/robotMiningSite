@@ -1,7 +1,6 @@
 - removal of mining site
-  - player
 	- robots
-	- destruction
+	- destruction?
 
 - test migration
 - different sizes of mining site
