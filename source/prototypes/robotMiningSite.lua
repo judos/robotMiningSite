@@ -41,8 +41,8 @@ data:extend({
     minable = {hardness = 0.2, mining_time = 2, result = "robotMiningSite"},
 		max_health = 300,
 		corpse = "small-remnants",
-    collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
-		selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+    collision_box = {{-0.9, -1.4}, {0.9, 1.4}},
+		selection_box = {{0, 0.6}, {0.9, 1.4}},
 		inventory_size = 10,
 		logistic_mode = "passive-provider",
     open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
@@ -53,7 +53,7 @@ data:extend({
 			priority = "extra-high",
 			width = 136,
 			height = 132,
-			shift = {0.875, -1}
+			shift = {1.4, 0}
     },
 		order = "c[signal]-b[robotMiningSiteArea]",
 		circuit_wire_max_distance = 7.5

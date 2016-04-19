@@ -3,10 +3,10 @@ function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
-	local pos = {x = entity.position.x-1, y=entity.position.y}
+	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
 	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
 	storageChest.operable = false
-	local pos = {x = entity.position.x-1, y=entity.position.y-2}
+	local pos = {x = entity.position.x, y=entity.position.y-0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
 	miningRoboport.operable = false
 	
