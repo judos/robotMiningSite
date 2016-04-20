@@ -5,9 +5,11 @@ function migration_0_2_0()
 	-- old: global.robotMiningSite.schedule[tick] = { entity, ... }
 	-- new: global.robotMiningSite.schedule[tick][idEntity] = $ENTITY$
 	
-	if not global.entityData then global.entityData = {} end
+	if not global.robotMiningSite.entityData then global.robotMiningSite.entityData = {} end
 	for tick,array in pairs(global.robotMiningSite.schedule) do
+		warn(array)
 		for _,entity in pairs(array) do
+			warn(entity.valid)
 			if entity.valid then
 				local pos = entity.position
 				local surface = entity.surface

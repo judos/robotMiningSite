@@ -7,7 +7,7 @@ require "control.miningRobot"
 require "control.forces"
 require "control.migration_0_2_0"
 
-local robotMiningSiteName = "robotMiningSite"
+local robotMiningSiteName = "robotMiningSite-new"
 local miningRobotName = "mining-robot"
 
 -- global data stored and used:

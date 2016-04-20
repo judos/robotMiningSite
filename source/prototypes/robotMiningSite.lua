@@ -1,4 +1,3 @@
-require "libs.functions"
 
 -- Item
 data:extend({
@@ -6,7 +5,7 @@ data:extend({
 		type = "item",
 		name = "robotMiningSite",
 		icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
-		place_result = "robotMiningSite",
+		place_result = "robotMiningSite-new",
 		flags = {"goes-to-quickbar"},
     subgroup = "logistic-network",
     order = "c[signal]-b[robotMiningSite]",
@@ -35,7 +34,7 @@ data:extend({
 data:extend({
  {
     type = "logistic-container",
-    name = "robotMiningSite",
+    name = "robotMiningSite-new",
     icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
     flags = {"placeable-neutral", "player-creation"},
     minable = {hardness = 0.2, mining_time = 2, result = "robotMiningSite"},
