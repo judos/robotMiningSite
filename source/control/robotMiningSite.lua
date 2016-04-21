@@ -107,6 +107,7 @@ function shouldMiningSiteRun(entity,data)
 	local parameters = condition.parameters
 
 	local checkFirstItem = parameters.first_signal.name
+	if not checkFirstItem then return true end -- no condition specified
 	local actualAmount = network.get_item_count(checkFirstItem)
 
 	local compareAgainstAmount

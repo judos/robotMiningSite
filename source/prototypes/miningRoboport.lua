@@ -7,7 +7,7 @@ overwriteContent(miningRoboport,{
 	logistics_radius = 2,
 	construction_radius = 10,
 	material_slots_count = 0,
-	robot_slots_count = 1,
+	robot_slots_count = 10,
 	collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
 	selection_box = {{-1, -1}, {1, 1}},
 	order = "zzz",
