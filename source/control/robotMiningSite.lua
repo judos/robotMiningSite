@@ -63,10 +63,10 @@ function runMiningSiteInstructions(entity,data)
 	local totalRobots = network.all_construction_robots
 	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 	
+	if not shouldMiningSiteRun(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
+
 	local robots = network.available_construction_robots
 	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
-	
-	if not shouldMiningSiteRun(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
 	
 	local testStack = {name="iron-ore",count=1}
 	local forceName = miningForceFor(entity)

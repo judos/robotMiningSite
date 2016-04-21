@@ -4,7 +4,8 @@ overwriteContent(miningRoboport,{
 	name = "mining-roboport",
 
 	charging_energy = "600kW",
-	logistics_radius = 2,
+	energy_usage = "50kW",
+	logistics_radius = 10,
 	construction_radius = 10,
 	material_slots_count = 0,
 	robot_slots_count = 10,
@@ -17,6 +18,13 @@ overwriteContent(miningRoboport,{
   },
 	
 	construction_radius_visualisation_picture = {
+		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-construction-radius-visualization.png",
+		width = 12,
+		height = 12,
+		priority = "extra-high-no-scale"
+	},
+	radius_visualisation_picture =
+	{
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-construction-radius-visualization.png",
 		width = 12,
 		height = 12,

@@ -1,5 +1,6 @@
+
+- research speed for mining robots
 - different sizes of mining site
-- logistic condition for mining site
 
 /c game.player.print(serpent.block(game.player.selected.position))
 /c game.player.insert{name="robotMiningSite",count=5}
