@@ -3,22 +3,27 @@ function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
-	local pos = {x = entity.position.x, y=entity.position.y-0.5}
+	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
 	miningRoboport.operable = false
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
 	
-	local pos = {x = entity.position.x, y=entity.position.y-0.5}
+	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
 	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceFor(entity)})
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
 	
-	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
+	local pos = {x = entity.position.x-1, y=entity.position.y+1}
 	local providerChest = entity.surface.create_entity({name="logistic-chest-passive-provider",position=pos,force=entity.force})
 	providerChest.minable = false
 	providerChest.destructible = false
+	
+	local pos = {x = entity.position.x+1, y=entity.position.y-0.5}
+	local logisticsDecider = entity.surface.create_entity({name="logistic-decider-combinator",position=pos,force=entity.force})
+	logisticsDecider.minable = false
+	logisticsDecider.destructible = false
 	
 	-- Robot mining site should not be opened, since inventory is used only for safe deconstruction and collecting all items
 	entity.operable = false
@@ -26,7 +31,8 @@ function miningSiteWasBuilt(entity)
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
-		providerChest = providerChest
+		providerChest = providerChest,
+		logisticsDecider = logisticsDecider
 	}
 end
 
@@ -45,8 +51,8 @@ function runMiningSiteInstructions(entity,data)
 	end
 
 	local r = 10 --range
-	local p = entity.position
-	local searchArea = {{p.x - r, p.y - r -0.5}, {p.x + r, p.y + r -0.5}}
+	local p = data.miningRoboport.position
+	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
 	local resources = entity.surface.find_entities_filtered{type="resource", area = searchArea}
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
@@ -60,10 +66,12 @@ function runMiningSiteInstructions(entity,data)
 	local robots = network.available_construction_robots
 	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
 	
+	if not shouldMiningSiteRun(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
+	
 	local testStack = {name="iron-ore",count=1}
 	local forceName = miningForceFor(entity)
 	
-	for i=1,robots+2 do
+	for i=1,robots+1 do
 		local n = math.random(#resources)
 		local position = resources[n].position
 		
@@ -88,6 +96,35 @@ function runMiningSiteInstructions(entity,data)
 	end
 	
 	return updateEveryTicks,"working..."
+end
+
+function shouldMiningSiteRun(entity,data)
+	local network = data.providerChest.logistic_network
+	if not network then return true end --no condition when no network available
+	
+	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
+	if not condition then return true end
+	local parameters = condition.parameters
+
+	local checkFirstItem = parameters.first_signal.name
+	local actualAmount = network.get_item_count(checkFirstItem)
+
+	local compareAgainstAmount
+	if parameters.second_signal then
+		local checkSecondItem = parameters.second_signal.name
+		compareAgainstAmount = network.get_item_count(checkSecondItem)
+	else
+		compareAgainstAmount = parameters.constant
+	end
+	
+	local diff = actualAmount - compareAgainstAmount
+	if parameters.comparator == ">" then
+		return diff > 0
+	elseif parameters.comparator == "=" then
+		return diff == 0
+	else
+		return diff < 0
+	end
 end
 
 
@@ -132,4 +169,5 @@ function removeMiningSite(idEntity,data)
 	data.miningRoboport.destroy()
 	data.storageChest.destroy()
 	data.providerChest.destroy()
+	data.logisticsDecider.destroy()
 end
