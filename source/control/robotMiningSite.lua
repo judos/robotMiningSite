@@ -20,6 +20,9 @@ function miningSiteWasBuilt(entity)
 	providerChest.minable = false
 	providerChest.destructible = false
 	
+	-- Robot mining site should not be opened, since inventory is used only for safe deconstruction and collecting all items
+	entity.operable = false
+	
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
@@ -51,6 +54,8 @@ function runMiningSiteInstructions(entity,data)
 	
 	local network = data.miningRoboport.logistic_network
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
+	local totalRobots = network.all_construction_robots
+	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 	
 	local robots = network.available_construction_robots
 	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
@@ -111,10 +116,11 @@ function preMineRobotMiningSite(event)
 		local p = game.players[event.player_index]
 		local playerInventory = p.get_inventory(defines.inventory.player_main)
 		for _,invToClear in pairs(inventoriesToClear) do
-			if not moveInventoryToInventory(invToClear,entityInv) then break end
+			if not moveInventoryToInventory(invToClear,playerInventory) then break end
 		end
 		for _,invToClear in pairs(inventoriesToClear) do
 			if not invToClear.is_empty() then
+				warn("needs to spill: "..serpent.block(invToClear.get_contents()))
 				spillInventory(invToClear, entity.surface, entity.position)
 			end
 		end

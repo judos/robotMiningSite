@@ -16,14 +16,12 @@ function moveInventoryToInventory(invSource,invTarget)
 	for itemName,count in pairs(invSource.get_contents()) do
 		local stack = {name=itemName,count=count}
 		if invTarget.can_insert(stack) then
+			stack.count = invTarget.insert(stack)
 			stack.count = invSource.remove(stack)
-			invTarget.insert(stack)
 		else
-			warn("finished checking, no space left")
 			return false -- couldn't move all, target chest is full
 		end
 	end
-	warn("finished checking")
 	return true
 end
 

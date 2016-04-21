@@ -33,7 +33,7 @@ data:extend({
 -- Entity
 data:extend({
  {
-    type = "logistic-container",
+    type = "container",
     name = "robotMiningSite-new",
     icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
     flags = {"placeable-neutral", "player-creation"},
@@ -42,8 +42,7 @@ data:extend({
 		corpse = "small-remnants",
     collision_box = {{-0.9, -1.4}, {0.9, 1.4}},
 		selection_box = {{0, 0.6}, {0.9, 1.4}},
-		inventory_size = 10,
-		logistic_mode = "passive-provider",
+		inventory_size = 60,
     open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
     close_sound = { filename = "__base__/sound/wooden-chest-close.ogg" },
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
