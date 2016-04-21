@@ -9,8 +9,8 @@ function miningSiteWasBuilt(entity)
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
 	
-	local pos = {x = entity.position.x-0.5, y=entity.position.y+1}
-	local storageChest = entity.surface.create_entity({name="logistic-chest-storage",position=pos,force=miningForceFor(entity)})
+	local pos = {x = entity.position.x, y=entity.position.y-0.5}
+	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceFor(entity)})
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
