@@ -55,30 +55,31 @@ function runMiningSiteInstructions(entity,data)
 	local robots = network.available_construction_robots
 	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
 	
+	local testStack = {name="iron-ore",count=1}
+	local forceName = miningForceFor(entity)
+	
 	for i=1,robots+2 do
 		local n = math.random(#resources)
-		local stack = {name=resources[n].name,count=1}
 		local position = resources[n].position
-		if stack.name then
-			-- check if mining is unobstructed
-			if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=stack} then
-				if resources[n].amount>1 then
-					resources[n].amount = resources[n].amount - 1
-				else
-					resources[n].destroy()
-				end
-				
-				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=stack}
+		
+		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
+			if resources[n].amount>1 then
+				resources[n].amount = resources[n].amount - 1
+			else
+				resources[n].destroy()
+			end
+			
+			local itemStacksGenerated = getMiningResult(resources[n])
+			for _,itemStack in pairs(itemStacksGenerated) do 
+				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 				if itemEntity and itemEntity.valid then
-					local forceName = miningForceFor(entity)
 					itemEntity.order_deconstruction(forceName)
 				end
 			end
-			table.remove(resources,n)
-			if #resources==0 then break end
-		else
-			warn("stack.name is nil for position: "..serpent.block(position).." and resource: "..serpent.block(resources[n]))
 		end
+
+		table.remove(resources,n)
+		if #resources==0 then break end
 	end
 	
 	return updateEveryTicks,"working..."
