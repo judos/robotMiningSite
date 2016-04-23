@@ -43,8 +43,6 @@ data:extend({
     collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
 		selection_box = {{-0.4, 0.6}, {0.4, 1.4}},
 		inventory_size = 60,
-    open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
-    close_sound = { filename = "__base__/sound/wooden-chest-close.ogg" },
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
     picture = {
       filename = "__robotMiningSite__/graphics/entity/robotMiningSite.png",

@@ -2,7 +2,7 @@ data:extend({
   {
     type = "technology",
     name = "mining-robotics",
-    icon = "__base__/graphics/technology/construction-robotics.png",
+    icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
     prerequisites = {"construction-robotics"},
     unit = {
       count = 100,
