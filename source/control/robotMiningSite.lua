@@ -82,8 +82,9 @@ function runMiningSiteInstructions(entity,data)
 				resources[n].destroy()
 			end
 			
-			local itemStacksGenerated = getMiningResult(resources[n])
+			local itemStacksGenerated = getMiningResultItems(resources[n])
 			for _,itemStack in pairs(itemStacksGenerated) do 
+				warn(itemStack)
 				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 				if itemEntity and itemEntity.valid then
 					itemEntity.order_deconstruction(forceName)
