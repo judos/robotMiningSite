@@ -78,7 +78,6 @@ function runMiningSiteInstructions(entity,data)
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
 			local itemStacksGenerated = mineResource(resources[n])
 			for _,itemStack in pairs(itemStacksGenerated) do 
-				warn(itemStack)
 				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 				if itemEntity and itemEntity.valid then
 					itemEntity.order_deconstruction(forceName)
@@ -93,16 +92,6 @@ function runMiningSiteInstructions(entity,data)
 	return updateEveryTicks,"working..."
 end
 
-
-function mineResource(resource)
-	local itemStacksGenerated = getMiningResultItems(resource)
-	if resource.amount>1 then
-		resource.amount = resource.amount - 1
-	else
-		resource.destroy()
-	end
-	return itemStacksGenerated
-end
 
 -- checks logistics decider whether the mining site should be running or not
 function shouldMiningSiteRun(entity,data)

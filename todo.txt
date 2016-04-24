@@ -1,4 +1,3 @@
-
 - research speed for mining robots
 - different sizes of mining site
 
