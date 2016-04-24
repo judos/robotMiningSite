@@ -6,14 +6,17 @@ require "control.robotMiningSite"
 require "control.miningRobot"
 require "control.forces"
 require "control.migration_0_2_0"
+require "control.speedTechnology"
 
 local robotMiningSiteName = "robotMiningSite-new"
 local robotMiningSiteNameOld = "robotMiningSite"
 local miningRobotName = "mining-robot"
+local modVersion = "0.2.1"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
 -- global.robotMiningSite.entityData[idEntity] = { name=$name, ... }
+-- global.robotMiningSite.speedResearch = $research_level
 
 ---------------------------------------------------
 -- Loading
@@ -36,10 +39,11 @@ function onLoad()
 	if not d then
 		d = {}
 		global.robotMiningSite = d
-		d.version = "0.2.0"
+		d.version = modVersion
 	end
 	if not d.schedule then d.schedule = {} end
 	if not d.entityData then d.entityData={} end
+	speedTechnologyInit()
 end
 
 ---------------------------------------------------
@@ -47,7 +51,7 @@ end
 ---------------------------------------------------
 script.on_event(defines.events.on_tick, function(event)
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
-	
+	if global.robotMiningSite.version < modVersion then global.robotMiningSite.version = modVersion end --no migration needed
   -- if no updates are scheduled return
 	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
 		return
@@ -80,7 +84,6 @@ script.on_event(defines.events.on_tick, function(event)
 			if data.name == robotMiningSiteName then
 				removeMiningSite(entityId,data)
 			end
-
 		end
 	end
 	global.robotMiningSite.schedule[game.tick] = nil

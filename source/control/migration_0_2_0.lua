@@ -7,7 +7,6 @@ function migration_0_2_0()
 	
 	if not global.robotMiningSite.entityData then global.robotMiningSite.entityData = {} end
 	for tick,array in pairs(global.robotMiningSite.schedule) do
-		warn(array)
 		for _,entity in pairs(array) do
 			removeOldEntityAndPlaceDown(entity)
 		end

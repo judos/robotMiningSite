@@ -4,13 +4,13 @@ function miningSiteWasBuilt(entity)
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
-	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceFor(entity)})
+	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceForEntity(entity)})
 	miningRoboport.operable = false
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
 	
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
-	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceFor(entity)})
+	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceForEntity(entity)})
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
@@ -69,7 +69,7 @@ function runMiningSiteInstructions(entity,data)
 	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
 	
 	local testStack = {name="iron-ore",count=1}
-	local forceName = miningForceFor(entity)
+	local forceName = miningForceForEntity(entity)
 	
 	for i=1,robots+1 do
 		local n = math.random(#resources)
