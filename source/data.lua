@@ -2,7 +2,7 @@ require "config"
 require "libs.functions"
 
 require "prototypes.technology"
-
+require "prototypes.emptyItem"
 require "prototypes.miningRoboport"
 require "prototypes.miningRobot"
 require "prototypes.robotMiningSite"

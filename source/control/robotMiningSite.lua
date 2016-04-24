@@ -76,13 +76,7 @@ function runMiningSiteInstructions(entity,data)
 		local position = resources[n].position
 		
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
-			if resources[n].amount>1 then
-				resources[n].amount = resources[n].amount - 1
-			else
-				resources[n].destroy()
-			end
-			
-			local itemStacksGenerated = getMiningResultItems(resources[n])
+			local itemStacksGenerated = mineResource(resources[n])
 			for _,itemStack in pairs(itemStacksGenerated) do 
 				warn(itemStack)
 				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
@@ -99,6 +93,18 @@ function runMiningSiteInstructions(entity,data)
 	return updateEveryTicks,"working..."
 end
 
+
+function mineResource(resource)
+	local itemStacksGenerated = getMiningResultItems(resource)
+	if resource.amount>1 then
+		resource.amount = resource.amount - 1
+	else
+		resource.destroy()
+	end
+	return itemStacksGenerated
+end
+
+-- checks logistics decider whether the mining site should be running or not
 function shouldMiningSiteRun(entity,data)
 	local network = data.providerChest.logistic_network
 	if not network then return true end --no condition when no network available
@@ -130,6 +136,7 @@ function shouldMiningSiteRun(entity,data)
 end
 
 
+-- moves items from roboport / passive provider chest into robot mining site such that they are picked up by robot/player
 function preMineRobotMiningSite(event)
 -- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
 	local entity = event.entity
@@ -167,6 +174,7 @@ function preMineRobotMiningSite(event)
 end
 
 
+-- final removal of robot mining site
 function removeMiningSite(idEntity,data)
 	data.miningRoboport.destroy()
 	data.storageChest.destroy()
