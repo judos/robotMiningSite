@@ -15,6 +15,7 @@ data:extend({
 			},
 			time = 30
 		},
+		upgrade = true,
 		order = "_mining1"
 	}
 })
