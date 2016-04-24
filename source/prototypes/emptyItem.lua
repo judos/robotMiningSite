@@ -1,3 +1,5 @@
+require("prototypes.generatedItemSubgroup")
+
 data:extend({
   {
     type = "item",
