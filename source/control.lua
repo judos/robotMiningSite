@@ -8,6 +8,7 @@ require "control.forces"
 require "control.migration_0_2_0"
 
 local robotMiningSiteName = "robotMiningSite-new"
+local robotMiningSiteNameOld = "robotMiningSite"
 local miningRobotName = "mining-robot"
 
 -- global data stored and used:
@@ -65,6 +66,10 @@ script.on_event(defines.events.on_tick, function(event)
 					-- if no more update is scheduled, remove it from memory
 					-- nothing to be done here, the entity will just not be scheduled anymore
 				end
+			elseif entity.name == robotMiningSiteNameOld then
+				removeOldEntityAndPlaceDown(entity)
+			else
+				warn("updating entity with unknown name: "..entity.name)
 			end
 		elseif entityId == "text" then
 			PlayerPrint(entity)
