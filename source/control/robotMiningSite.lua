@@ -179,6 +179,18 @@ end
 
 -- final removal of robot mining site
 function removeMiningSite(idEntity,data)
+	local inventoriesToClear = {
+		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
+		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position}, 
+		{data.providerChest.get_inventory(defines.inventory.chest), data.providerChest.position}
+	}
+	local surface = data.miningRoboport.surface
+	for _,arr in pairs(inventoriesToClear) do
+		if not arr[1].is_empty() then
+			warn("needs to spill: "..serpent.block(arr[1].get_contents()))
+			spillInventory(arr[1], surface, arr[2])
+		end
+	end
 	data.miningRoboport.destroy()
 	data.storageChest.destroy()
 	data.providerChest.destroy()
