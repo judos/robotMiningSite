@@ -1,3 +1,3 @@
-releaseFolder = release
 sourceFolder = source
+releaseFolder = release
 modName = MyMod
