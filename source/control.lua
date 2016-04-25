@@ -59,6 +59,10 @@ end
 script.on_event(defines.events.on_tick, function(event)
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
 	if global.robotMiningSite.version < modVersion then global.robotMiningSite.version = modVersion end --no migration needed
+	if global.robotMiningSite.version > modVersion then
+		error("Using savegame with newer mod version than installed version")
+		global.robotMiningSite.version = modVersion
+	end
   -- if no updates are scheduled return
 	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
 		return
