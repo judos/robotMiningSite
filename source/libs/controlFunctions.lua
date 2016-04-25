@@ -21,8 +21,13 @@ function moveInventoryToInventory(invSource,invTarget)
 		else
 			return false -- couldn't move all, target chest is full
 		end
+		if stack.count ~= count then return false end
 	end
 	return true
+end
+
+function killItemsInInventor(inventory, itemName)
+	inventory.remove({name=itemName,count=1000000})
 end
 
 

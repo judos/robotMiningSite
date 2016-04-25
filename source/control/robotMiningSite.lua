@@ -39,7 +39,9 @@ end
 function moveItemsToPassiveProvider(entity,data)
 	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
 	local invTarget = data.providerChest.get_inventory(defines.inventory.chest)
-	return moveInventoryToInventory(invSource,invTarget)
+	local movedAll = moveInventoryToInventory(invSource,invTarget)
+	killItemsInInventor(invTarget,"empty-item")
+	return movedAll
 end
 
 -- parameters: entity
