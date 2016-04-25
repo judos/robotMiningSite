@@ -51,7 +51,6 @@ data:extend({
 			height = 132,
 			shift = {0.9, 0}
     },
-		order = "c[signal]-b[robotMiningSiteArea]",
-		circuit_wire_max_distance = 7.5
+		order = "c[signal]-b[robotMiningSiteArea]"
   },
 })

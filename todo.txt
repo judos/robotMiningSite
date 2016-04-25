@@ -1,5 +1,1 @@
-- different sizes of mining site
-- robot mining area connector
-
-/c game.player.print(serpent.block(game.player.selected.position))
-/c game.player.insert{name="robotMiningSite",count=5}
+immediate update after premining step

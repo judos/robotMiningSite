@@ -3,8 +3,15 @@ function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 	
+	local sizeSuffix = ""
+	local name = entity.name
+	if name:ends("-large") then
+		sizeSuffix = "-large"
+	elseif name:ends("-extra") then
+		sizeSuffix = "-extra"
+	end
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
-	local miningRoboport = entity.surface.create_entity({name="mining-roboport",position=pos,force=miningForceForEntity(entity)})
+	local miningRoboport = entity.surface.create_entity({name="mining-roboport"..sizeSuffix,position=pos,force=miningForceForEntity(entity)})
 	miningRoboport.operable = false
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
@@ -53,6 +60,11 @@ function runMiningSiteInstructions(entity,data)
 	end
 
 	local r = 10 --range
+	if entity.name:ends("-large") then
+		r = 20
+	elseif entity.name:ends("-extra") then
+		r = 40
+	end
 	local p = data.miningRoboport.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
 	local resources = entity.surface.find_entities_filtered{type="resource", area = searchArea}

@@ -9,9 +9,16 @@ require "control.migration_0_2_0"
 require "control.speedTechnology"
 
 local robotMiningSiteName = "robotMiningSite-new"
+local robotMiningSiteNameLarge = "robotMiningSite-large"
+local robotMiningSiteNameExtra = "robotMiningSite-extra"
 local robotMiningSiteNameOld = "robotMiningSite"
 local miningRobotName = "mining-robot"
-local modVersion = "0.2.1"
+
+local miningRange = 10
+local miningRangeLarge = 20
+local miningRangeExtra = 40
+
+local modVersion = "0.2.2"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
@@ -59,7 +66,8 @@ script.on_event(defines.events.on_tick, function(event)
 	for entityId,entity in pairs(global.robotMiningSite.schedule[game.tick]) do
 		if entity and entity.valid then
 			local data = global.robotMiningSite.entityData[idOfEntity(entity)]
-			if entity.name == robotMiningSiteName then
+			local name = entity.name
+			if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 				local nextUpdateInXTicks, reasonMessage = runMiningSiteInstructions(entity,data)
 				if reasonMessage then
 					info(robotMiningSiteName.." at " .. entity.position.x .. ", " ..entity.position.y .. ": "..reasonMessage)
@@ -70,10 +78,10 @@ script.on_event(defines.events.on_tick, function(event)
 					-- if no more update is scheduled, remove it from memory
 					-- nothing to be done here, the entity will just not be scheduled anymore
 				end
-			elseif entity.name == robotMiningSiteNameOld then
+			elseif name == robotMiningSiteNameOld then
 				removeOldEntityAndPlaceDown(entity)
 			else
-				warn("updating entity with unknown name: "..entity.name)
+				warn("updating entity with unknown name: "..name)
 			end
 		elseif entityId == "text" then
 			PlayerPrint(entity)
@@ -81,7 +89,8 @@ script.on_event(defines.events.on_tick, function(event)
 			-- if entity was removed, remove it from memory
 			info("removing entity at: "..entityId)
 			local data = global.robotMiningSite.entityData[entityId]
-			if data.name == robotMiningSiteName then
+			local name = data.name
+			if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 				removeMiningSite(entityId,data)
 			end
 		end
@@ -103,13 +112,13 @@ function entityBuilt(event)
 	local entity = event.created_entity
 	local name = entity.name
 	
-	local knownEntities = table.set({robotMiningSiteName,miningRobotName})
+	local knownEntities = table.set({robotMiningSiteName,robotMiningSiteNameLarge,robotMiningSiteNameExtra,miningRobotName})
 	if not knownEntities[name] then
 		return
 	end
 	
 	local data=nil
-	if name == robotMiningSiteName then
+	if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 		data = miningSiteWasBuilt(entity)
 	elseif name == miningRobotName then
 		miningRobotWasBuilt(entity)
@@ -133,7 +142,8 @@ end)
 
 function preMined(event) --event table doesn't contain player_index when a robot mines the entity
 	local entity = event.entity
-	if entity.name == robotMiningSiteName then
+	local name = entity.name
+	if entity.name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 		preMineRobotMiningSite(event)
 	end
 end

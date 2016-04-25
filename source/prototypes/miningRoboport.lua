@@ -5,32 +5,28 @@ overwriteContent(miningRoboport,{
 
 	charging_energy = "600kW",
 	energy_usage = "50kW",
-	logistics_radius = 10,
-	construction_radius = 10,
+	logistics_radius = 5,
+	construction_radius = 5,
 	material_slots_count = 0,
 	robot_slots_count = 10,
 	collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
 	selection_box = {{-1, -1}, {1, 1}},
 	order = "zzz",
-
 	charging_offsets = {
     {-0.75, -0.25}, {0.75, -0.25}, {0.75, 0.75}, {-0.75, 0.75},
   },
-	
 	construction_radius_visualisation_picture = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-construction-radius-visualization.png",
 		width = 12,
 		height = 12,
 		priority = "extra-high-no-scale"
 	},
-	radius_visualisation_picture =
-	{
+	radius_visualisation_picture = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-construction-radius-visualization.png",
 		width = 12,
 		height = 12,
 		priority = "extra-high-no-scale"
 	},
-	
 	base = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-base.png",
 		width = 72,
@@ -70,7 +66,6 @@ overwriteContent(miningRoboport,{
 		frame_count = 16,
 		shift = {0.0078125, -0.1171875}
 	},
-
 	recharging_animation = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-recharging.png",
 		priority = "high",
@@ -83,3 +78,24 @@ overwriteContent(miningRoboport,{
 })
 
 data:extend({miningRoboport})
+
+
+local largeRoboport = deepcopy(data.raw.roboport["mining-roboport"])
+overwriteContent(largeRoboport, {
+	name = "mining-roboport-large",
+	charging_energy = "1200kW",
+	energy_usage = "100kW",
+	logistics_radius = 10,
+	construction_radius = 10
+})
+data:extend({largeRoboport})
+
+local extraRoboport = deepcopy(data.raw.roboport["mining-roboport"])
+overwriteContent(extraRoboport, {
+	name = "mining-roboport-extra",
+	charging_energy = "2400kW",
+	energy_usage = "200kW",
+	logistics_radius = 20,
+	construction_radius = 20
+})
+data:extend({extraRoboport})
