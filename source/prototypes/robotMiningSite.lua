@@ -33,7 +33,7 @@ data:extend({
 -- Entity
 data:extend({
  {
-    type = "container",
+    type = "logistic-container",
     name = "robotMiningSite-new",
     icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
     flags = {"placeable-neutral", "player-creation"},
@@ -43,14 +43,16 @@ data:extend({
     collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
 		selection_box = {{-0.4, 0.6}, {0.4, 1.4}},
 		inventory_size = 60,
+		logistic_mode = "passive-provider",
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
     picture = {
-      filename = "__robotMiningSite__/graphics/entity/robotMiningSite.png",
+      filename = "__robotMiningSite__/graphics/entity/robotMiningSite1-chest.png",
 			priority = "extra-high",
-			width = 136,
+			width = 150,
 			height = 132,
-			shift = {0.9, 0}
+			shift = {0.4625, 0}
     },
-		order = "c[signal]-b[robotMiningSiteArea]"
+		order = "c[signal]-b[robotMiningSiteArea]",
+		circuit_wire_max_distance = 7.5
   },
 })

@@ -6,6 +6,7 @@ require "control.robotMiningSite"
 require "control.miningRobot"
 require "control.forces"
 require "control.migration_0_2_0"
+require "control.migration_0_2_3"
 require "control.speedTechnology"
 
 local robotMiningSiteName = "robotMiningSite-new"
@@ -18,7 +19,7 @@ local miningRange = 10
 local miningRangeLarge = 20
 local miningRangeExtra = 40
 
-local modVersion = "0.2.2"
+local modVersion = "0.2.3"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
@@ -58,6 +59,7 @@ end
 ---------------------------------------------------
 script.on_event(defines.events.on_tick, function(event)
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
+	if global.robotMiningSite.version < "0.2.3" then migration_0_2_3() end
 	if global.robotMiningSite.version < modVersion then global.robotMiningSite.version = modVersion end --no migration needed
 	if global.robotMiningSite.version > modVersion then
 		error("Using savegame with newer mod version than installed version")

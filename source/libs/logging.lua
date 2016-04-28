@@ -7,7 +7,7 @@ end
 function warn(message)
 	if debug_level<=2 then _debug(message,"WARN") end
 end
-function error(message)
+function err(message)
 	if debug_level<=3 then _debug(message,"ERROR") end
 end
 
@@ -17,7 +17,7 @@ function _debug(message,level)
 		if type(message) ~= "string" then
 			message = serpent.block(message)
 		end
-		print(level..": "..message)
+		print("\n"..level..": "..message)
 	end
 end
 

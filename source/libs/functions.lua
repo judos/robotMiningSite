@@ -20,6 +20,10 @@ function addTechnologyUnlocksRecipe(technologyName, recipeName)
 end
 
 function overwriteContent(originalTable,newContent)
+	if originalTable == nil then
+		err("could not overwrite content of nil with new content: "..serpent.block(newContent))
+		return
+	end
 	for k,d in pairs(newContent) do
 		originalTable[k]=d
 	end

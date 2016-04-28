@@ -46,7 +46,7 @@ data:extend({
 })
 
 -- Entities
-local largeEntity = deepcopy(data.raw.container["robotMiningSite-new"])
+local largeEntity = deepcopy(data.raw["logistic-container"]["robotMiningSite-new"])
 overwriteContent(largeEntity, {
 	name = "robotMiningSite-large",
 	icon = largeItem.icon,
@@ -56,7 +56,7 @@ largeEntity.minable.result = "robotMiningSite-large"
 largeEntity.picture.filename = "__robotMiningSite__/graphics/entity/robotMiningSite-large.png"
 data:extend({largeEntity})
 
-local extraEntity = deepcopy(data.raw.container["robotMiningSite-new"])
+local extraEntity = deepcopy(data.raw["logistic-container"]["robotMiningSite-new"])
 overwriteContent(extraEntity, {
 	name = "robotMiningSite-extra",
 	icon = extraItem.icon,

@@ -22,11 +22,6 @@ function miningSiteWasBuilt(entity)
 	storageChest.minable = false
 	storageChest.destructible = false
 	
-	local pos = {x = entity.position.x-1, y=entity.position.y+1}
-	local providerChest = entity.surface.create_entity({name="logistic-chest-passive-provider",position=pos,force=entity.force})
-	providerChest.minable = false
-	providerChest.destructible = false
-	
 	local pos = {x = entity.position.x+1, y=entity.position.y-0.5}
 	local logisticsDecider = entity.surface.create_entity({name="logistic-decider-combinator",position=pos,force=entity.force})
 	logisticsDecider.minable = false
@@ -38,14 +33,13 @@ function miningSiteWasBuilt(entity)
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
-		providerChest = providerChest,
 		logisticsDecider = logisticsDecider
 	}
 end
 
 function moveItemsToPassiveProvider(entity,data)
 	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
-	local invTarget = data.providerChest.get_inventory(defines.inventory.chest)
+	local invTarget = entity.get_inventory(defines.inventory.chest)
 	local movedAll = moveInventoryToInventory(invSource,invTarget)
 	killItemsInInventor(invTarget,"empty-item")
 	return movedAll
@@ -59,11 +53,11 @@ function runMiningSiteInstructions(entity,data)
 		return updateEveryTicksWaiting,"no space in chest left"
 	end
 
-	local r = 10 --range
+	local r = 5 --range
 	if entity.name:ends("-large") then
-		r = 20
+		r = 10
 	elseif entity.name:ends("-extra") then
-		r = 40
+		r = 20
 	end
 	local p = data.miningRoboport.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
@@ -109,7 +103,7 @@ end
 
 -- checks logistics decider whether the mining site should be running or not
 function shouldMiningSiteRun(entity,data)
-	local network = data.providerChest.logistic_network
+	local network = entity.logistic_network
 	if not network then return true end --no condition when no network available
 	
 	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
@@ -150,8 +144,7 @@ function preMineRobotMiningSite(event)
 	-- Move items from chests into robot mining site (player or bots pick them up)
 	local inventoriesToClear = {
 		data.miningRoboport.get_inventory(1),
-		data.storageChest.get_inventory(defines.inventory.chest), 
-		data.providerChest.get_inventory(defines.inventory.chest)
+		data.storageChest.get_inventory(defines.inventory.chest)
 	}
 	for _,invToClear in pairs(inventoriesToClear) do
 		if not moveInventoryToInventory(invToClear,entityInv) then
@@ -182,7 +175,6 @@ function removeMiningSite(idEntity,data)
 	local inventoriesToClear = {
 		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
 		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position}, 
-		{data.providerChest.get_inventory(defines.inventory.chest), data.providerChest.position}
 	}
 	local surface = data.miningRoboport.surface
 	for _,arr in pairs(inventoriesToClear) do
@@ -193,6 +185,5 @@ function removeMiningSite(idEntity,data)
 	end
 	data.miningRoboport.destroy()
 	data.storageChest.destroy()
-	data.providerChest.destroy()
 	data.logisticsDecider.destroy()
 end
