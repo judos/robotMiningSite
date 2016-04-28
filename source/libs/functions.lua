@@ -1,6 +1,7 @@
 require "libs.logging"
 require "libs.basic-lua-extensions"
 require "libs.resources"
+require "libs.inventory"
 
 -- adds a recipe which is unlocked when the given technology is researched
 function addTechnologyUnlocksRecipe(technologyName, recipeName)
