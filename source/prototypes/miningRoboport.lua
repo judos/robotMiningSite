@@ -1,3 +1,5 @@
+require "config"
+
 local miningRoboport = deepcopy(data.raw.roboport.roboport)
 
 overwriteContent(miningRoboport,{
@@ -5,8 +7,8 @@ overwriteContent(miningRoboport,{
 
 	charging_energy = "600kW",
 	energy_usage = "50kW",
-	logistics_radius = 5,
-	construction_radius = 5,
+	logistics_radius = miningRange,
+	construction_radius = miningRange,
 	material_slots_count = 0,
 	robot_slots_count = 10,
 	collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
@@ -85,8 +87,8 @@ overwriteContent(largeRoboport, {
 	name = "mining-roboport-large",
 	charging_energy = "1200kW",
 	energy_usage = "100kW",
-	logistics_radius = 10,
-	construction_radius = 10
+	logistics_radius = miningRangeLarge,
+	construction_radius = miningRangeLarge
 })
 data:extend({largeRoboport})
 
@@ -95,7 +97,7 @@ overwriteContent(extraRoboport, {
 	name = "mining-roboport-extra",
 	charging_energy = "2400kW",
 	energy_usage = "200kW",
-	logistics_radius = 20,
-	construction_radius = 20
+	logistics_radius = miningRangeExtra,
+	construction_radius = miningRangeExtra
 })
 data:extend({extraRoboport})

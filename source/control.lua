@@ -15,10 +15,6 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 local robotMiningSiteNameOld = "robotMiningSite"
 local miningRobotName = "mining-robot"
 
-local miningRange = 10
-local miningRangeLarge = 20
-local miningRangeExtra = 40
-
 local modVersion = "0.2.3"
 
 -- global data stored and used:

@@ -1,3 +1,4 @@
+require "config"
 
 function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
@@ -53,11 +54,11 @@ function runMiningSiteInstructions(entity,data)
 		return updateEveryTicksWaiting,"no space in chest left"
 	end
 
-	local r = 5 --range
+	local r = miningRange --range
 	if entity.name:ends("-large") then
-		r = 10
+		r = miningRangeLarge
 	elseif entity.name:ends("-extra") then
-		r = 20
+		r = miningRangeExtra
 	end
 	local p = data.miningRoboport.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
