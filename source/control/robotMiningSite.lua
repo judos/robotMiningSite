@@ -104,21 +104,29 @@ end
 
 -- checks logistics decider whether the mining site should be running or not
 function shouldMiningSiteRun(entity,data)
-	local network = entity.logistic_network
-	if not network then return true end --no condition when no network available
-	
 	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
 	if not condition then return true end
 	local parameters = condition.parameters
 
 	local checkFirstItem = parameters.first_signal.name
 	if not checkFirstItem then return true end -- no condition specified
-	local actualAmount = network.get_item_count(checkFirstItem)
+
+	local network = entity.logistic_network
+	local actualAmount
+	if network then
+		actualAmount = network.get_item_count(checkFirstItem)
+	else
+		actualAmount = entity.get_inventory(defines.inventory.chest).get_item_count(checkFirstItem)
+	end
 
 	local compareAgainstAmount
 	if parameters.second_signal then
 		local checkSecondItem = parameters.second_signal.name
-		compareAgainstAmount = network.get_item_count(checkSecondItem)
+		if network then
+			compareAgainstAmount = network.get_item_count(checkSecondItem)
+		else
+			compareAgainstAmount = entity.get_inventory(defines.inventory.chest).get_item_count(checkSecondItem)
+		end
 	else
 		compareAgainstAmount = parameters.constant
 	end
