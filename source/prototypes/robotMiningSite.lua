@@ -41,7 +41,7 @@ data:extend({
 		max_health = 300,
 		corpse = "small-remnants",
     collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
-		selection_box = {{-0.4, 0.6}, {0.4, 1.4}},
+		selection_box = {{-1.4, 0.6}, {0.4, 1.4}},
 		inventory_size = 60,
 		logistic_mode = "passive-provider",
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
@@ -50,7 +50,7 @@ data:extend({
 			priority = "extra-high",
 			width = 150,
 			height = 132,
-			shift = {0.4625, 0}
+			shift = {0.85, 0}
     },
 		order = "c[signal]-b[robotMiningSiteArea]",
 		circuit_wire_max_distance = 7.5
