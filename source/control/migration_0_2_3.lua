@@ -26,8 +26,6 @@ function migration_0_2_3()
 		end
 	end
 	global.robotMiningSite.version = "0.2.3"
-	
-	scheduleText(60,"Migrated to robotMiningSite 0.2.3")
 end
 
 function scheduleText(inTicks,text)
