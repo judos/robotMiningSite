@@ -7,7 +7,7 @@ overwriteContent(miningRoboport,{
 
 	charging_energy = "600kW",
 	energy_usage = "50kW",
-	logistics_radius = miningRange,
+	logistics_radius = miningRange-2,
 	construction_radius = miningRange,
 	material_slots_count = 0,
 	robot_slots_count = 10,
@@ -87,7 +87,7 @@ overwriteContent(largeRoboport, {
 	name = "mining-roboport-large",
 	charging_energy = "1200kW",
 	energy_usage = "100kW",
-	logistics_radius = miningRangeLarge,
+	logistics_radius = miningRangeLarge-2,
 	construction_radius = miningRangeLarge
 })
 data:extend({largeRoboport})
@@ -97,7 +97,7 @@ overwriteContent(extraRoboport, {
 	name = "mining-roboport-extra",
 	charging_energy = "2400kW",
 	energy_usage = "200kW",
-	logistics_radius = miningRangeExtra,
+	logistics_radius = miningRangeExtra-2,
 	construction_radius = miningRangeExtra
 })
 data:extend({extraRoboport})

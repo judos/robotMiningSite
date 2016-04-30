@@ -41,7 +41,7 @@ data:extend({
 		max_health = 300,
 		corpse = "small-remnants",
     collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
-		selection_box = {{-1.4, 0.6}, {0.4, 1.4}},
+		selection_box = {{-1.5, 0.5}, {0.5, 1.5}},
 		inventory_size = 60,
 		logistic_mode = "passive-provider",
     vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
