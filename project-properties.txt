@@ -1,3 +1,2 @@
-sourceFolder = source
 releaseFolder = release
-modName = MyMod
+sourceFolder = source
