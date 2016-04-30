@@ -28,9 +28,6 @@ function miningSiteWasBuilt(entity)
 	logisticsDecider.minable = false
 	logisticsDecider.destructible = false
 	
-	-- Robot mining site should not be opened, since inventory is used only for safe deconstruction and collecting all items
-	entity.operable = false
-	
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
