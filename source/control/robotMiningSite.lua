@@ -101,6 +101,8 @@ end
 
 -- checks logistics decider whether the mining site should be running or not
 function shouldMiningSiteRun(entity,data)
+	if entity.to_be_deconstructed(entity.force) then return false end
+	
 	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
 	if not condition then return true end
 	local parameters = condition.parameters
