@@ -3,6 +3,7 @@ function idOfEntity(entity)
 	return string.format("%g_%g", entity.position.x, entity.position.y)
 end
 
+
 function entityOfId(id,searchName)
 	if id == nil then
 		err("Got nil when searching entity for id.\n"..debug.traceback())
@@ -35,4 +36,14 @@ function entityOfId(id,searchName)
 		end
 	end
 	return entities[1]
+end
+
+
+function recipeResultsItemAmount(recipe,itemName)
+	for _,itemStack in pairs(recipe.products) do
+		if itemStack.name == itemName then
+			return itemStack.amount
+		end
+	end
+	return 0
 end

@@ -1,23 +1,12 @@
 require "libs.logging"
 require "libs.basic-lua-extensions"
-require "libs.resources"
+require "libs.find-raw-ingredients"
 require "libs.inventory"
+require "libs.prototypes"
+require "libs.resources"
+require "libs.recipe"
+require "libs.technology"
 
--- adds a recipe which is unlocked when the given technology is researched
-function addTechnologyUnlocksRecipe(technologyName, recipeName)
-	local tech = data.raw["technology"][technologyName]
-	if tech then
-		if not tech.effects then
-			tech.effects = {}
-		end
-		table.insert(tech.effects, {type = "unlock-recipe", recipe = recipeName })
-	else
-		error("Technology "..technologyName.." not found. Did you mean?")
-		for name,_ in pairs(data.raw["technology"]) do
-			error(" "..name)
-		end
-	end
-end
 
 function overwriteContent(originalTable,newContent)
 	if originalTable == nil then
@@ -28,3 +17,11 @@ function overwriteContent(originalTable,newContent)
 		originalTable[k]=d
 	end
 end
+
+
+function removeAfterSign(str, separator)
+	local pos = str:find(separator)
+	if pos == nil then return str end
+	return str:sub(1,pos-1)
+end
+
