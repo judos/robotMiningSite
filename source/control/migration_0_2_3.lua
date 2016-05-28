@@ -1,12 +1,13 @@
+
 function migration_0_2_3()
 	-- migrate data to new variables
 	-- Entities are invalid since type has changed -> search them and replace again in schedule
-	
+
 	-- Current relevant data:
 	-- global.robotMiningSite.schedule[tick][idEntity] = $entity
 	-- global.robotMiningSite.entityData[idEntity] = { name=$name, ... }
 
-	
+	info(serpent.block(global.robotMiningSite.schedule))
 	for tick,arr in pairs(global.robotMiningSite.schedule) do
 		for idEntity,entity in pairs(arr) do
 			if not entity.valid then
@@ -26,9 +27,4 @@ function migration_0_2_3()
 		end
 	end
 	global.robotMiningSite.version = "0.2.3"
-end
-
-function scheduleText(inTicks,text)
-	global.robotMiningSite.schedule[game.tick+inTicks]={}
-	global.robotMiningSite.schedule[game.tick+inTicks]["text"]=text
 end

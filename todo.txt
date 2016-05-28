@@ -1,6 +1,4 @@
-change condition to use smart-lamp
 add robot-chest input/output
 separate entity: logistics-decider -> neat logistics ?
 
 immediate update check after premining step
-clean up entityData when miningSite was removed (broken references)

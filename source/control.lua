@@ -37,12 +37,13 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
+--	info("global data: "..serpent.block(global))
 	if not global.robotMiningSite then global.robotMiningSite = {version=modVersion} end
 	local d = global.robotMiningSite
 	if not d.schedule then d.schedule = {} end
 	if not d.entityData then d.entityData={} end
 	speedTechnologyInit()
-
+--	info("global data: "..serpent.block(global))
 	entities_init()
 end
 

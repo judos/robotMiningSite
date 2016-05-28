@@ -26,16 +26,6 @@ function migration_0_3_0()
 		end
 	end
 	
-	
-	
-	
 	global.robotMiningSite.version = "0.3.0"
-	scheduleText("Migrated to robotMiningSite 0.3.0")
-end
-
-function scheduleText(text)
-	if not global.schedule[TICK_ASAP] then
-		global.schedule[TICK_ASAP]={}
-	end
-	global.schedule[TICK_ASAP]["text"]=text
+	PlayerPrint("RobotMiningSite migrated to 0.3.0")
 end
