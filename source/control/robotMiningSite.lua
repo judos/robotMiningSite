@@ -39,7 +39,7 @@ function moveItemsToPassiveProvider(entity,data)
 	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
 	local invTarget = entity.get_inventory(defines.inventory.chest)
 	local movedAll = moveInventoryToInventory(invSource,invTarget)
-	killItemsInInventor(invTarget,"empty-item")
+	killItemsInInventor(invTarget,"fake-generated-item")
 	return movedAll
 end
 
@@ -87,17 +87,20 @@ function runMiningSiteInstructions(entity,data)
 	
 	local targetItems = robots
 	local curItems = 0
-	for i=1,robots do
+	for i=1,robots+5 do
 		local n = math.random(#resources)
 		local position = resources[n].position
 
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
-			local itemStacksGenerated = mineResource(resources[n])
-			for _,itemStack in pairs(itemStacksGenerated) do
-				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
-				if itemEntity and itemEntity.valid then
-					itemEntity.order_deconstruction(forceName)
-					curItems = curItems + 1
+			local beltsCount = entity.surface.count_entities_filtered{area={position,position}, type="transport-belt"}
+			if beltsCount == 0 then
+				local itemStacksGenerated = mineResource(resources[n])
+				for _,itemStack in pairs(itemStacksGenerated) do
+					local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
+					if itemEntity and itemEntity.valid then
+						itemEntity.order_deconstruction(forceName)
+						curItems = curItems + 1
+					end
 				end
 			end
 		end
@@ -106,8 +109,6 @@ function runMiningSiteInstructions(entity,data)
 		if #resources==0 then break end
 	end
 	
-	info("target items: "..targetItems.." deconstructed: "..curItems)
-
 	if entity.name:ends("-extra") then
 		return updateEveryTicks*2,"working..."
 	end

@@ -9,15 +9,16 @@ end
 
 function miningForceForForce(forceName)
 	if type(forceName) ~= "string" then
-		warn(forceName)
+		warn("Invalid forceName: "..tostring(forceName))
 		forceName = forceName.name
 	end
 	if not forceName:ends(forceSuffix) then
-		miningForceName = forceName..forceSuffix
+		local miningForceName = forceName..forceSuffix
 		if not game.forces[miningForceName] then
 			game.create_force(miningForceName)
 			game.forces[forceName].set_cease_fire(miningForceName,true)
 		end
+		return miningForceName
 	end
-	return miningForceName
+	return forceName
 end
