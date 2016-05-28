@@ -32,11 +32,7 @@ miningSite.build = function(entity)
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
-
-	local pos = {x = entity.position.x+1, y=entity.position.y-0.5}
-	local logisticsDecider = entity.surface.create_entity({name="logistic-decider-combinator",position=pos,force=entity.force})
-	logisticsDecider.minable = false
-	logisticsDecider.destructible = false
+	
 	local pos = {x = entity.position.x+1, y=entity.position.y-1}
 	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
 	control.minable = false
@@ -45,7 +41,6 @@ miningSite.build = function(entity)
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
-		logisticsDecider = logisticsDecider,
 		control = control
 	}
 end
@@ -69,7 +64,7 @@ miningSite.tick = function(entity,data)
 	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 
 	-- Logistics condition
-	if not logisticsConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
+	if not circuitConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
 
 	-- Resources
 	local resources = findNearbyResources(entity,data)
@@ -128,7 +123,7 @@ miningSite.remove = function(data)
 	end
 	data.miningRoboport.destroy()
 	data.storageChest.destroy()
-	data.logisticsDecider.destroy()
+	data.control.destroy()
 end
 
 
@@ -177,13 +172,13 @@ function hasEnoughEnergy(entity,data)
 	return currentEnergy > miningSiteMinimalEnergy * maxEnergyCapacity * 1000000 --MJ to J conversion
 end
 
--- checks logistics decider whether the mining site should be running or not
-function logisticsConditionIsOk(entity,data)
+
+function circuitConditionIsOk(entity,data)
 	if entity.to_be_deconstructed(entity.force) then return false end
 
-	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
+	local condition = data.control.get_circuit_condition(defines.circuitconditionindex.lamp)
 	if not condition then return true end
-	local parameters = condition.parameters
+	local parameters = condition.condition
 
 	local checkFirstItem = parameters.first_signal.name
 	if not checkFirstItem then return true end -- no condition specified

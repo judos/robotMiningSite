@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
 	<buildpathentry kind="src" path="source"/>
+	<buildpathentry kind="src" path="lualib"/>
 	<buildpathentry kind="con" path="org.eclipse.ldt.ExecutionEnvironmentContainer/lua/5.2"/>
 	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/lualibs"/>
 </buildpath>

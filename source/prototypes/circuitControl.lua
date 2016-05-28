@@ -8,10 +8,28 @@ overwriteContent(control,{
 		type = "electric",
 		usage_priority = "secondary-output"
 	},
-	order = "zzz"
+	order = "zzz",
+	picture_off = {
+		filename = "__robotMiningSite__/graphics/entity/circuitControl-off.png",
+		priority = "high",
+		width = 67,
+		height = 58,
+		frame_count = 1,
+		axially_symmetrical = false,
+		direction_count = 1,
+		shift = {-0.021875, 0.16875},
+	},
+	picture_on = {
+		filename = "__robotMiningSite__/graphics/entity/circuitControl-on.png",
+		priority = "high",
+		width = 67,
+		height = 58,
+		frame_count = 1,
+		axially_symmetrical = false,
+		direction_count = 1,
+		shift = {-0.021875, 0.16875},
+	},
 })
-control.picture_off.filename = "__robotMiningSite__/graphics/entity/circuitControl-off.png"
-control.picture_on.filename = "__robotMiningSite__/graphics/entity/circuitControl-on.png"
 
 data:extend({
 	control

@@ -14,7 +14,6 @@ require "control.speedTechnology"
 local robotMiningSiteName = "robotMiningSite-new"
 local robotMiningSiteNameLarge = "robotMiningSite-large"
 local robotMiningSiteNameExtra = "robotMiningSite-extra"
-local robotMiningSiteNameOld = "robotMiningSite"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
@@ -31,6 +30,7 @@ script.on_load(function()
 	onLoad()
 end)
 
+local checkMigration = true
 function onLoad()
 	if not global then
 		global = {}
@@ -44,6 +44,20 @@ function onLoad()
 	speedTechnologyInit()
 
 	entities_init()
+end
+
+---------------------------------------------------
+-- Tick
+---------------------------------------------------
+script.on_event(defines.events.on_tick, function(event)
+	if checkMigration then
+		migration()
+		checkMigration = false
+	end
+	entities_tick()
+end)
+
+function migration()
 	local prevVersion = global.robotMiningSite.version
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
 	if global.robotMiningSite.version < "0.2.3" then migration_0_2_3() end
@@ -57,13 +71,6 @@ function onLoad()
 		global.robotMiningSite.version = modVersion
 	end
 end
-
----------------------------------------------------
--- Tick
----------------------------------------------------
-script.on_event(defines.events.on_tick, function(event)
-	entities_tick()
-end)
 
 ---------------------------------------------------
 -- Building Entities
