@@ -1,11 +1,11 @@
-modName = "hardCrafting"
+require "constants"
 
 function addItem(itemName, subgroup, order, stackSize)
 	data:extend({
 		{
 			type = "item",
 			name = itemName,
-			icon = "__"..modName.."__/graphics/icons/"..itemName..".png",
+			icon = "__"..fullModName.."__/graphics/icons/"..itemName..".png",
 			flags = {"goes-to-main-inventory"},
 			subgroup = subgroup,
 			order = order,
@@ -27,7 +27,7 @@ function addRecipe(name,category,subgroup,timeRequired,ingredients,results,order
 		end
 		table.insert(resultsDetailled, {type=typ, name=s[1], amount=s[2]})
 	end
-	imageName = removeAfterSign(name,"|")
+	local imageName = removeAfterSign(name,"|")
 	data:extend({
 	{
 		type = "recipe",
@@ -36,7 +36,7 @@ function addRecipe(name,category,subgroup,timeRequired,ingredients,results,order
 		subgroup = subgroup,
     energy_required = timeRequired,
     ingredients = ingredients,
-		icon = "__"..modName.."__/graphics/icons/"..imageName..".png",
+		icon = "__"..fullModName.."__/graphics/icons/"..imageName..".png",
     results = resultsDetailled,
 		order = order
 	}

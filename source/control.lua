@@ -15,8 +15,6 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 local robotMiningSiteNameOld = "robotMiningSite"
 local miningRobotName = "mining-robot"
 
-local modVersion = "0.2.3"
-
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
 -- global.robotMiningSite.entityData[idEntity] = { name=$name, ... }
@@ -38,21 +36,13 @@ function onLoad()
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
+	if not global.robotMiningSite then global.robotMiningSite = {version=modVersion} end
 	local d = global.robotMiningSite
-	if not d then
-		d = {}
-		global.robotMiningSite = d
-		d.version = modVersion
-	end
 	if not d.schedule then d.schedule = {} end
 	if not d.entityData then d.entityData={} end
 	speedTechnologyInit()
-end
 
----------------------------------------------------
--- Tick
----------------------------------------------------
-script.on_event(defines.events.on_tick, function(event)
+	entities_init()
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
 	if global.robotMiningSite.version < "0.2.3" then migration_0_2_3() end
 	if global.robotMiningSite.version < modVersion then global.robotMiningSite.version = modVersion end --no migration needed
@@ -60,6 +50,37 @@ script.on_event(defines.events.on_tick, function(event)
 		error("Using savegame with newer mod version than installed version")
 		global.robotMiningSite.version = modVersion
 	end
+end
+
+--[[
+script.on_event(defines.events.on_tick, function(event)
+	updateIncinerators()
+	gui_tick()
+	entities_tick()
+end)
+
+
+---------------------------------------------------
+-- Building Entities
+---------------------------------------------------
+script.on_event(defines.events.on_built_entity, function(event)
+	entityBuilt(event)
+end)
+script.on_event(defines.events.on_robot_built_entity, function(event)
+	entityBuilt(event)
+end)
+
+function entityBuilt(event)
+	entities_build(event)
+end
+
+]]--
+
+---------------------------------------------------
+-- Tick
+---------------------------------------------------
+script.on_event(defines.events.on_tick, function(event)
+	
   -- if no updates are scheduled return
 	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
 		return
