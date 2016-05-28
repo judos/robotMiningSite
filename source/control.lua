@@ -39,7 +39,6 @@ function onLoad()
 		game.forces.player.reset_recipes()
 	end
 	local d = global.robotMiningSite
-	info("robotMiningSite data = "..serpent.block(d))
 	if not d then
 		d = {}
 		global.robotMiningSite = d
