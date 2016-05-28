@@ -2,6 +2,7 @@ require "defines"
 require "config"
 require "libs.functions"
 require "libs.controlFunctions"
+
 require "control.robotMiningSite"
 require "control.miningRobot"
 require "control.forces"
@@ -13,7 +14,6 @@ local robotMiningSiteName = "robotMiningSite-new"
 local robotMiningSiteNameLarge = "robotMiningSite-large"
 local robotMiningSiteNameExtra = "robotMiningSite-extra"
 local robotMiningSiteNameOld = "robotMiningSite"
-local miningRobotName = "mining-robot"
 
 -- global data stored and used:
 -- global.robotMiningSite.schedule[tick][idEntity] = $entity
@@ -131,10 +131,11 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 end)
 
 function entityBuilt(event)
+	if entities_build(event) then return end
 	local entity = event.created_entity
 	local name = entity.name
 	
-	local knownEntities = table.set({robotMiningSiteName,robotMiningSiteNameLarge,robotMiningSiteNameExtra,miningRobotName})
+	local knownEntities = table.set({robotMiningSiteName,robotMiningSiteNameLarge,robotMiningSiteNameExtra})
 	if not knownEntities[name] then
 		return
 	end
@@ -142,8 +143,6 @@ function entityBuilt(event)
 	local data=nil
 	if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 		data = miningSiteWasBuilt(entity)
-	elseif name == miningRobotName then
-		miningRobotWasBuilt(entity)
 	end
 	if data then 
 		global.robotMiningSite.entityData[idOfEntity(entity)] = { ["name"] = name }
@@ -168,15 +167,4 @@ function preMined(event) --event table doesn't contain player_index when a robot
 	if entity.name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
 		preMineRobotMiningSite(event)
 	end
-end
-
----------------------------------------------------
--- Utility methods
----------------------------------------------------
--- Adds new entry to the scheduling table
-function scheduleAdd(entity, nextTick)
-	if global.robotMiningSite.schedule[nextTick] == nil then
-		global.robotMiningSite.schedule[nextTick] = {}
-	end
-	global.robotMiningSite.schedule[nextTick][idOfEntity(entity)]=entity
 end

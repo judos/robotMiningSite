@@ -96,13 +96,16 @@ end
 function entities_build(event)
 	local entity = event.created_entity
 	local name = entity.name
-	if entities[name] == nil then return end
+	if entities[name] == nil then return false end
 	global.entityData[idOfEntity(entity)] = { ["name"] = name }
 	if entities[name].build then
 		local data = entities[name].build(entity)
+		if data then
 --		info("storing data table for entity "..entity.name.." with id "..idOfEntity(entity)..": "..serpent.block(data))
-		table.addTable(global.entityData[idOfEntity(entity)],data)
+			table.addTable(global.entityData[idOfEntity(entity)],data)
+		end
 	end
+	return true
 end
 
 ---------------------------------------------------
