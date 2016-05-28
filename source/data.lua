@@ -1,7 +1,7 @@
 require "config"
 require "libs.functions"
 
-require "prototypes.emptyItem"
+require "prototypes.fakeGeneratedItem"
 require "prototypes.miningRoboport"
 require "prototypes.miningRobot"
 require "prototypes.robotMiningSite"
