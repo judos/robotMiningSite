@@ -9,9 +9,10 @@ local SIZE_EXTRA = 3
 -- Register entity
 local miningSite = {}
 entities["robotMiningSite-new"] = miningSite
+entities["robotMiningSite-large"] = miningSite
+entities["robotMiningSite-extra"] = miningSite
 
 miningSite.build = function(entity)
-	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 
 	local sizeSuffix = ""
@@ -61,7 +62,8 @@ miningSite.tick = function(entity,data)
 	local network = data.miningRoboport.logistic_network
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local totalRobots = network.all_construction_robots
-	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
+	info(serpent.block(network).." robots: "..totalRobots)
+	if (not totalRobots) or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 
 	-- Logistics condition
 	if not circuitConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
