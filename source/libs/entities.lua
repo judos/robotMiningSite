@@ -12,7 +12,9 @@ require "libs.logging"
 -- global.entities_cleanup_required = boolean(check and remove all old events)
 
 -- Register custom entity build, tick or remove function:
--- [$entityName] = { build = $function(entity), tick = $function(entity,data), remove = $function(data) }
+-- [$entityName] = { build = $function(entity):dataArr,
+--                   tick = $function(entity,data):(nextTick,reason), 
+--                   remove = $function(data) }
 entities = {}
 
 -- Required calls in control:
@@ -41,9 +43,9 @@ end
 function entities_tick()
 	-- schedule events from migration
 	if global.schedule[TICK_ASAP] ~= nil then
+		if global.schedule[game.tick] == nil then global.schedule[game.tick] = {} end
 		for id,entity in pairs(global.schedule[TICK_ASAP]) do
-			local nextTick = game.tick+math.random(60)
-			scheduleAdd(entity, nextTick)
+			global.schedule[game.tick][id] = entity
 		end
 		global.schedule[TICK_ASAP] = nil
 	end
@@ -60,6 +62,7 @@ function entities_tick()
 	
 	-- Execute all scheduled events
 	for entityId,entity in pairs(global.schedule[game.tick]) do
+		info("updating id "..entityId.." entity: "..serpent.block(entity))
 		if entity and entity.valid then
 			local data = global.entityData[entityId]
 			local name = entity.name

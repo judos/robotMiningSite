@@ -8,6 +8,7 @@ require "control.miningRobot"
 require "control.forces"
 require "control.migration_0_2_0"
 require "control.migration_0_2_3"
+require "control.migration_0_3_0"
 require "control.speedTechnology"
 
 local robotMiningSiteName = "robotMiningSite-new"
@@ -43,112 +44,37 @@ function onLoad()
 	speedTechnologyInit()
 
 	entities_init()
+	local prevVersion = global.robotMiningSite.version
 	if global.robotMiningSite.version < "0.2.0" then migration_0_2_0() end
 	if global.robotMiningSite.version < "0.2.3" then migration_0_2_3() end
+	if global.robotMiningSite.version < "0.3.0" then migration_0_3_0() end
+	if global.robotMiningSite.version ~= prevVersion then
+		info("Previous version: "..prevVersion..", migrated to: "..global.robotMiningSite.version)
+	end
 	if global.robotMiningSite.version < modVersion then global.robotMiningSite.version = modVersion end --no migration needed
 	if global.robotMiningSite.version > modVersion then
-		error("Using savegame with newer mod version than installed version")
+		error("Using savegame with newer robotMiningSite version ("..global.robotMiningSite.version..") than installed version ("..modVersion..")")
 		global.robotMiningSite.version = modVersion
 	end
 end
-
---[[
-script.on_event(defines.events.on_tick, function(event)
-	updateIncinerators()
-	gui_tick()
-	entities_tick()
-end)
-
-
----------------------------------------------------
--- Building Entities
----------------------------------------------------
-script.on_event(defines.events.on_built_entity, function(event)
-	entityBuilt(event)
-end)
-script.on_event(defines.events.on_robot_built_entity, function(event)
-	entityBuilt(event)
-end)
-
-function entityBuilt(event)
-	entities_build(event)
-end
-
-]]--
 
 ---------------------------------------------------
 -- Tick
 ---------------------------------------------------
 script.on_event(defines.events.on_tick, function(event)
-	
-  -- if no updates are scheduled return
-	if type(global.robotMiningSite.schedule[game.tick]) ~= "table" then
-		return
-	end
-	for entityId,entity in pairs(global.robotMiningSite.schedule[game.tick]) do
-		if entity and entity.valid then
-			local data = global.robotMiningSite.entityData[idOfEntity(entity)]
-			local name = entity.name
-			if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
-				local nextUpdateInXTicks, reasonMessage = runMiningSiteInstructions(entity,data)
-				if reasonMessage then
-					info(robotMiningSiteName.." at " .. entity.position.x .. ", " ..entity.position.y .. ": "..reasonMessage)
-				end
-				if nextUpdateInXTicks then
-					scheduleAdd(entity, game.tick + nextUpdateInXTicks)
-				else
-					-- if no more update is scheduled, remove it from memory
-					-- nothing to be done here, the entity will just not be scheduled anymore
-				end
-			elseif name == robotMiningSiteNameOld then
-				removeOldEntityAndPlaceDown(entity)
-			else
-				warn("updating entity with unknown name: "..name)
-			end
-		elseif entityId == "text" then
-			PlayerPrint(entity)
-		else
-			-- if entity was removed, remove it from memory
-			info("removing entity at: "..entityId)
-			local data = global.robotMiningSite.entityData[entityId]
-			local name = data.name
-			if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
-				removeMiningSite(entityId,data)
-			end
-		end
-	end
-	global.robotMiningSite.schedule[game.tick] = nil
+	entities_tick()
 end)
 
 ---------------------------------------------------
--- Building entities
+-- Building Entities
 ---------------------------------------------------
+
 script.on_event(defines.events.on_built_entity, function(event)
-	entityBuilt(event)
+	entities_build(event)
 end)
 script.on_event(defines.events.on_robot_built_entity, function(event)
-	entityBuilt(event)
+	entities_build(event)
 end)
-
-function entityBuilt(event)
-	if entities_build(event) then return end
-	local entity = event.created_entity
-	local name = entity.name
-	
-	local knownEntities = table.set({robotMiningSiteName,robotMiningSiteNameLarge,robotMiningSiteNameExtra})
-	if not knownEntities[name] then
-		return
-	end
-	
-	local data=nil
-	if name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
-		data = miningSiteWasBuilt(entity)
-	end
-	if data then 
-		global.robotMiningSite.entityData[idOfEntity(entity)] = { ["name"] = name }
-		table.addTable(global.robotMiningSite.entityData[idOfEntity(entity)],data)
-	end
-end
 
 ---------------------------------------------------
 -- Removing entities

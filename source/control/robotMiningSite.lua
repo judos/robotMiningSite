@@ -1,6 +1,16 @@
 require "config"
 
-function miningSiteWasBuilt(entity)
+-- Constants:
+local SIZE_NORMAL = 1
+local SIZE_LARGE = 2
+local SIZE_EXTRA = 3
+
+
+-- Register entity
+local miningSite = {}
+entities["robotMiningSite-new"] = miningSite
+
+miningSite.build = function(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
 
@@ -35,43 +45,29 @@ function miningSiteWasBuilt(entity)
 	}
 end
 
-function moveItemsToPassiveProvider(entity,data)
-	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
-	local invTarget = entity.get_inventory(defines.inventory.chest)
-	local movedAll = moveInventoryToInventory(invSource,invTarget)
-	killItemsInInventor(invTarget,"fake-generated-item")
-	return movedAll
-end
+miningSite.tick = function(entity,data)
+	checkSizeOfMiningSite(entity,data)
 
--- parameters: entity
--- return values: tickDelayForNextUpdate, reasonMessage
-function runMiningSiteInstructions(entity,data)
+	-- Move items, check space in chest
 	local spaceLeft = moveItemsToPassiveProvider(entity,data)
 	if not spaceLeft then -- stop mining if chest is full
 		return updateEveryTicksWaiting,"no space in chest left"
 	end
 
+	-- Energy
 	if not hasEnoughEnergy(entity,data) then return updateEveryTicksWaiting,"not enough energy" end
 
+	-- Network
 	local network = data.miningRoboport.logistic_network
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local totalRobots = network.all_construction_robots
 	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 
+	-- Logistics condition
 	if not logisticsConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
 
-	local r = miningRange --range
-	local maxEnergyCapacity = capacityRoboport --MJ
-	if entity.name:ends("-large") then
-		r = miningRangeLarge
-		maxEnergyCapacity = capacityRoboportLarge --MJ
-	elseif entity.name:ends("-extra") then
-		r = miningRangeExtra
-		maxEnergyCapacity = capacityRoboportExtra --MJ
-	end
-	local p = data.miningRoboport.position
-	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
-	local resources = entity.surface.find_entities_filtered{type="resource", area = searchArea}
+	-- Resources
+	local resources = findNearbyResources(entity,data)
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
 	end
@@ -84,9 +80,7 @@ function runMiningSiteInstructions(entity,data)
 
 	local testStack = {name="iron-ore",count=1}
 	local forceName = miningForceForEntity(entity)
-	
-	local targetItems = robots
-	local curItems = 0
+
 	for i=1,robots+5 do
 		local n = math.random(#resources)
 		local position = resources[n].position
@@ -99,7 +93,6 @@ function runMiningSiteInstructions(entity,data)
 					local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 					if itemEntity and itemEntity.valid then
 						itemEntity.order_deconstruction(forceName)
-						curItems = curItems + 1
 					end
 				end
 			end
@@ -108,19 +101,71 @@ function runMiningSiteInstructions(entity,data)
 		table.remove(resources,n)
 		if #resources==0 then break end
 	end
-	
-	if entity.name:ends("-extra") then
+
+	if data.size == SIZE_EXTRA then
 		return updateEveryTicks*2,"working..."
 	end
-
 	return updateEveryTicks,"working..."
+end
+
+miningSite.remove = function(data)
+	-- final removal of robot mining site
+	local inventoriesToClear = {
+		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
+		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position},
+	}
+	local surface = data.miningRoboport.surface
+	for _,arr in pairs(inventoriesToClear) do
+		if not arr[1].is_empty() then
+			warn("needs to spill: "..serpent.block(arr[1].get_contents()))
+			spillInventory(arr[1], surface, arr[2])
+		end
+	end
+	data.miningRoboport.destroy()
+	data.storageChest.destroy()
+	data.logisticsDecider.destroy()
+end
+
+
+
+
+
+function findNearbyResources(entity,data)
+	local r = miningRange --range
+	if data.size == SIZE_LARGE then
+		r = miningRangeLarge
+	elseif data.size == SIZE_EXTRA then
+		r = miningRangeExtra
+	end
+	local p = data.miningRoboport.position
+	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
+	return entity.surface.find_entities_filtered{type="resource", area = searchArea}
+end
+
+function checkSizeOfMiningSite(entity,data)
+	if entity.name:ends("-large") then
+		data.size = SIZE_LARGE
+	elseif entity.name:ends("-extra") then
+		data.size = SIZE_EXTRA
+	else
+		data.size = SIZE_NORMAL
+	end
+end
+
+
+function moveItemsToPassiveProvider(entity,data)
+	local invSource = data.storageChest.get_inventory(defines.inventory.chest)
+	local invTarget = entity.get_inventory(defines.inventory.chest)
+	local movedAll = moveInventoryToInventory(invSource,invTarget)
+	killItemsInInventor(invTarget,"fake-generated-item")
+	return movedAll
 end
 
 function hasEnoughEnergy(entity,data)
 	local maxEnergyCapacity = capacityRoboport --MJ
-	if entity.name:ends("-large") then
+	if data.size == SIZE_LARGE then
 		maxEnergyCapacity = capacityRoboportLarge --MJ
-	elseif entity.name:ends("-extra") then
+	elseif data.size == SIZE_EXTRA then
 		maxEnergyCapacity = capacityRoboportExtra --MJ
 	end
 	local currentEnergy = data.miningRoboport.energy
@@ -203,23 +248,4 @@ function preMineRobotMiningSite(event)
 			end
 		end
 	end
-end
-
-
--- final removal of robot mining site
-function removeMiningSite(idEntity,data)
-	local inventoriesToClear = {
-		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
-		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position},
-	}
-	local surface = data.miningRoboport.surface
-	for _,arr in pairs(inventoriesToClear) do
-		if not arr[1].is_empty() then
-			warn("needs to spill: "..serpent.block(arr[1].get_contents()))
-			spillInventory(arr[1], surface, arr[2])
-		end
-	end
-	data.miningRoboport.destroy()
-	data.storageChest.destroy()
-	data.logisticsDecider.destroy()
 end
