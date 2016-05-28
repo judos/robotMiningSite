@@ -33,7 +33,7 @@ miningSite.build = function(entity)
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
-	
+
 	local pos = {x = entity.position.x+1, y=entity.position.y-1}
 	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
 	control.minable = false
@@ -62,7 +62,6 @@ miningSite.tick = function(entity,data)
 	local network = data.miningRoboport.logistic_network
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local totalRobots = network.all_construction_robots
-	info(serpent.block(network).." robots: "..totalRobots)
 	if (not totalRobots) or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 
 	-- Logistics condition
@@ -128,6 +127,40 @@ miningSite.remove = function(data)
 	data.control.destroy()
 end
 
+
+
+-- moves items from roboport / passive provider chest into robot mining site such that they are picked up by robot/player
+miningSite.premine = function(entity,data,player)
+
+	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
+	local entityInv = entity.get_inventory(defines.inventory.chest)
+
+	-- Move items from chests into robot mining site (player or bots pick them up)
+	local inventoriesToClear = {
+		data.miningRoboport.get_inventory(1),
+		data.storageChest.get_inventory(defines.inventory.chest)
+	}
+	for _,invToClear in pairs(inventoriesToClear) do
+		if not moveInventoryToInventory(invToClear,entityInv) then
+			break
+		end
+	end
+
+	-- since the player mines it all items have to be moved
+	if player then
+		-- if playerIndex is set in events table, every item must be moved in this method from the input chests, otherwise items get lost
+		local playerInventory = player.get_inventory(defines.inventory.player_main)
+		for _,invToClear in pairs(inventoriesToClear) do
+			if not moveInventoryToInventory(invToClear,playerInventory) then break end
+		end
+		for _,invToClear in pairs(inventoriesToClear) do
+			if not invToClear.is_empty() then
+				warn("needs to spill: "..serpent.block(invToClear.get_contents()))
+				spillInventory(invToClear, entity.surface, entity.position)
+			end
+		end
+	end
+end
 
 
 
@@ -212,42 +245,5 @@ function circuitConditionIsOk(entity,data)
 		return diff == 0
 	else
 		return diff < 0
-	end
-end
-
-
--- moves items from roboport / passive provider chest into robot mining site such that they are picked up by robot/player
-function preMineRobotMiningSite(event)
-	-- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 }
-	local entity = event.entity
-	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
-	local entityInv = entity.get_inventory(defines.inventory.chest)
-	local data = global.robotMiningSite.entityData[idOfEntity(entity)]
-
-	-- Move items from chests into robot mining site (player or bots pick them up)
-	local inventoriesToClear = {
-		data.miningRoboport.get_inventory(1),
-		data.storageChest.get_inventory(defines.inventory.chest)
-	}
-	for _,invToClear in pairs(inventoriesToClear) do
-		if not moveInventoryToInventory(invToClear,entityInv) then
-			break
-		end
-	end
-
-	-- since the player mines it all items have to be moved
-	if event.player_index then
-		-- if playerIndex is set in events table, every item must be moved in this method from the input chests, otherwise items get lost
-		local p = game.players[event.player_index]
-		local playerInventory = p.get_inventory(defines.inventory.player_main)
-		for _,invToClear in pairs(inventoriesToClear) do
-			if not moveInventoryToInventory(invToClear,playerInventory) then break end
-		end
-		for _,invToClear in pairs(inventoriesToClear) do
-			if not invToClear.is_empty() then
-				warn("needs to spill: "..serpent.block(invToClear.get_contents()))
-				spillInventory(invToClear, entity.surface, entity.position)
-			end
-		end
 	end
 end

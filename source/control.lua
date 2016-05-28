@@ -16,9 +16,13 @@ local robotMiningSiteNameLarge = "robotMiningSite-large"
 local robotMiningSiteNameExtra = "robotMiningSite-extra"
 
 -- global data stored and used:
--- global.robotMiningSite.schedule[tick][idEntity] = $entity
--- global.robotMiningSite.entityData[idEntity] = { name=$name, ... }
 -- global.robotMiningSite.speedResearch = $research_level
+
+---------------------------------------------------
+-- Used API
+---------------------------------------------------
+
+-- entities V2
 
 ---------------------------------------------------
 -- Loading
@@ -88,17 +92,9 @@ end)
 -- Removing entities
 ---------------------------------------------------
 script.on_event(defines.events.on_robot_pre_mined, function(event)
-	preMined(event)
+	entities_pre_mined(event)
 end)
 
 script.on_event(defines.events.on_preplayer_mined_item, function(event)
-	preMined(event)
+	entities_pre_mined(event)
 end)
-
-function preMined(event) --event table doesn't contain player_index when a robot mines the entity
-	local entity = event.entity
-	local name = entity.name
-	if entity.name == robotMiningSiteName or name == robotMiningSiteNameLarge or name == robotMiningSiteNameExtra then
-		preMineRobotMiningSite(event)
-	end
-end

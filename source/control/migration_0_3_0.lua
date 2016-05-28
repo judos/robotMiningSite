@@ -26,6 +26,8 @@ function migration_0_3_0()
 		end
 	end
 	
+	entities_migration_V2()
+	
 	global.robotMiningSite.version = "0.3.0"
 	PlayerPrint("RobotMiningSite migrated to 0.3.0")
 end

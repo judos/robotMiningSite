@@ -7,7 +7,7 @@ if debug_level == nil then
 	debug_level = 2
 end
 
-stack_trace = true
+stack_trace = false
 
 function info(message)
 	if debug_level<=1 then _debug(message,"INFO") end
