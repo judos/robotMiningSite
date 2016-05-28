@@ -37,11 +37,16 @@ miningSite.build = function(entity)
 	local logisticsDecider = entity.surface.create_entity({name="logistic-decider-combinator",position=pos,force=entity.force})
 	logisticsDecider.minable = false
 	logisticsDecider.destructible = false
+	local pos = {x = entity.position.x+1, y=entity.position.y-1}
+	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
+	control.minable = false
+	control.destructible = false
 
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
-		logisticsDecider = logisticsDecider
+		logisticsDecider = logisticsDecider,
+		control = control
 	}
 end
 

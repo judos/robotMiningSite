@@ -62,7 +62,6 @@ function entities_tick()
 	
 	-- Execute all scheduled events
 	for entityId,entity in pairs(global.schedule[game.tick]) do
-		info("updating id "..entityId.." entity: "..serpent.block(entity))
 		if entity and entity.valid then
 			local data = global.entityData[entityId]
 			local name = entity.name
