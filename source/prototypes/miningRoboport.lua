@@ -3,7 +3,7 @@ require "config"
 local miningRoboport = deepcopy(data.raw.roboport.roboport)
 local chargeEnergyMW = 1
 local energyUsage = 50
-local inputFlowMW = 2
+local inputFlowMW = 2.5
 
 overwriteContent(miningRoboport,{
 	name = "mining-roboport",
@@ -15,7 +15,7 @@ overwriteContent(miningRoboport,{
 		type = "electric",
 		usage_priority = "secondary-input",
 		input_flow_limit = inputFlowMW.."MW",
-		buffer_capacity = "48MJ"
+		buffer_capacity = capacityRoboport.."MJ"
 	},
 	logistics_radius = miningRange-2,
 	construction_radius = miningRange,
@@ -103,6 +103,7 @@ overwriteContent(largeRoboport, {
 	construction_radius = miningRangeLarge
 })
 largeRoboport.energy_source.input_flow_limit = (inputFlowMW*4).."MW"
+largeRoboport.energy_source.buffer_capacity = capacityRoboportLarge.."MJ"
 for _,v in pairs(miningRoboport.charging_offsets) do
 	table.insert(largeRoboport.charging_offsets,v)
 end
@@ -119,6 +120,7 @@ overwriteContent(extraRoboport, {
 	construction_radius = miningRangeExtra,
 })
 extraRoboport.energy_source.input_flow_limit = (inputFlowMW*16).."MW"
+extraRoboport.energy_source.buffer_capacity = capacityRoboportExtra.."MJ"
 for _,v in pairs(largeRoboport.charging_offsets) do
 	table.insert(extraRoboport.charging_offsets,v)
 end

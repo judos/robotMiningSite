@@ -3,7 +3,7 @@ require "config"
 function miningSiteWasBuilt(entity)
 	info("Entity built in tick "..game.tick.." and added it for update tick")
 	scheduleAdd(entity, game.tick + updateEveryTicks)
-	
+
 	local sizeSuffix = ""
 	local name = entity.name
 	if name:ends("-large") then
@@ -16,18 +16,18 @@ function miningSiteWasBuilt(entity)
 	miningRoboport.operable = false
 	miningRoboport.minable = false
 	miningRoboport.destructible = false
-	
+
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
 	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceForEntity(entity)})
 	storageChest.operable = false
 	storageChest.minable = false
 	storageChest.destructible = false
-	
+
 	local pos = {x = entity.position.x+1, y=entity.position.y-0.5}
 	local logisticsDecider = entity.surface.create_entity({name="logistic-decider-combinator",position=pos,force=entity.force})
 	logisticsDecider.minable = false
 	logisticsDecider.destructible = false
-	
+
 	return {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
@@ -51,11 +51,23 @@ function runMiningSiteInstructions(entity,data)
 		return updateEveryTicksWaiting,"no space in chest left"
 	end
 
+	if not hasEnoughEnergy(entity,data) then return updateEveryTicksWaiting,"not enough energy" end
+
+	local network = data.miningRoboport.logistic_network
+	if not network then	return updateEveryTicksWaiting,"no logistics network" end
+	local totalRobots = network.all_construction_robots
+	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
+
+	if not logisticsConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
+
 	local r = miningRange --range
+	local maxEnergyCapacity = capacityRoboport --MJ
 	if entity.name:ends("-large") then
 		r = miningRangeLarge
+		maxEnergyCapacity = capacityRoboportLarge --MJ
 	elseif entity.name:ends("-extra") then
 		r = miningRangeExtra
+		maxEnergyCapacity = capacityRoboportExtra --MJ
 	end
 	local p = data.miningRoboport.position
 	local searchArea = {{p.x - r, p.y - r}, {p.x + r, p.y + r}}
@@ -63,30 +75,29 @@ function runMiningSiteInstructions(entity,data)
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
 	end
-	
-	local network = data.miningRoboport.logistic_network
-	if not network then	return updateEveryTicksWaiting,"no logistics network" end
-	local totalRobots = network.all_construction_robots
-	if not totalRobots or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
-	
-	if not shouldMiningSiteRun(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
 
 	local robots = network.available_construction_robots
-	if not robots or robots==0 then return updateEveryTicks,"no robots available" end
-	
+	if not data.freeBefore then data.freeBefore = robots end
+	local delta = robots - data.freeBefore
+	data.freeBefore = robots
+	if delta<0 then return updateEveryTicks,"no robots available" end
+
 	local testStack = {name="iron-ore",count=1}
 	local forceName = miningForceForEntity(entity)
 	
-	for i=1,robots+1 do
+	local targetItems = robots
+	local curItems = 0
+	for i=1,robots do
 		local n = math.random(#resources)
 		local position = resources[n].position
-		
+
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
 			local itemStacksGenerated = mineResource(resources[n])
-			for _,itemStack in pairs(itemStacksGenerated) do 
+			for _,itemStack in pairs(itemStacksGenerated) do
 				local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 				if itemEntity and itemEntity.valid then
 					itemEntity.order_deconstruction(forceName)
+					curItems = curItems + 1
 				end
 			end
 		end
@@ -95,14 +106,30 @@ function runMiningSiteInstructions(entity,data)
 		if #resources==0 then break end
 	end
 	
+	info("target items: "..targetItems.." deconstructed: "..curItems)
+
+	if entity.name:ends("-extra") then
+		return updateEveryTicks*2,"working..."
+	end
+
 	return updateEveryTicks,"working..."
 end
 
+function hasEnoughEnergy(entity,data)
+	local maxEnergyCapacity = capacityRoboport --MJ
+	if entity.name:ends("-large") then
+		maxEnergyCapacity = capacityRoboportLarge --MJ
+	elseif entity.name:ends("-extra") then
+		maxEnergyCapacity = capacityRoboportExtra --MJ
+	end
+	local currentEnergy = data.miningRoboport.energy
+	return currentEnergy > miningSiteMinimalEnergy * maxEnergyCapacity * 1000000 --MJ to J conversion
+end
 
 -- checks logistics decider whether the mining site should be running or not
-function shouldMiningSiteRun(entity,data)
+function logisticsConditionIsOk(entity,data)
 	if entity.to_be_deconstructed(entity.force) then return false end
-	
+
 	local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
 	if not condition then return true end
 	local parameters = condition.parameters
@@ -129,7 +156,7 @@ function shouldMiningSiteRun(entity,data)
 	else
 		compareAgainstAmount = parameters.constant
 	end
-	
+
 	local diff = actualAmount - compareAgainstAmount
 	if parameters.comparator == ">" then
 		return diff > 0
@@ -143,12 +170,12 @@ end
 
 -- moves items from roboport / passive provider chest into robot mining site such that they are picked up by robot/player
 function preMineRobotMiningSite(event)
--- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 } 
+	-- entity Lua/Entity, name = 9, player_index = 1, tick = 96029 }
 	local entity = event.entity
 	-- index 3 is defines.inventory.resultInventory (the current lua api does not contain the up-to-date indexes)
 	local entityInv = entity.get_inventory(defines.inventory.chest)
 	local data = global.robotMiningSite.entityData[idOfEntity(entity)]
-	
+
 	-- Move items from chests into robot mining site (player or bots pick them up)
 	local inventoriesToClear = {
 		data.miningRoboport.get_inventory(1),
@@ -159,7 +186,7 @@ function preMineRobotMiningSite(event)
 			break
 		end
 	end
-	
+
 	-- since the player mines it all items have to be moved
 	if event.player_index then
 		-- if playerIndex is set in events table, every item must be moved in this method from the input chests, otherwise items get lost
@@ -182,7 +209,7 @@ end
 function removeMiningSite(idEntity,data)
 	local inventoriesToClear = {
 		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
-		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position}, 
+		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position},
 	}
 	local surface = data.miningRoboport.surface
 	for _,arr in pairs(inventoriesToClear) do
