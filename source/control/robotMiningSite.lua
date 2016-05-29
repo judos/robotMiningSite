@@ -40,11 +40,16 @@ miningSite.build = function(entity)
 			second_signal={type="item", name="iron-plate"}}
 		})
 	
+	local pos = {x = entity.position.x+1, y=entity.position.y}
+	local robotChest = entity.surface.create_entity({name="robot-chest",position=pos,force=entity.force})
+	
+	
 	local data = {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
 		control = control,
 		controlOverlay = controlOverlay,
+		robotChest = robotChest
 	}
 	for _,entity in pairs(data) do
 		entity.minable = false
@@ -66,14 +71,19 @@ miningSite.tick = function(entity,data)
 	-- Energy
 	if not hasEnoughEnergy(entity,data) then return updateEveryTicksWaiting,"not enough energy" end
 
+	-- Logistics condition
+	if not circuitConditionIsOk(entity,data) then
+		moveInventoryToInventory(data.miningRoboport.get_inventory(1),data.robotChest.get_inventory(defines.inventory.chest))
+		return updateEveryTicksWaiting,"logistics condition is false"
+	else
+		moveInventoryToInventory(data.robotChest.get_inventory(defines.inventory.chest),data.miningRoboport.get_inventory(1))
+	end
+
 	-- Network
 	local network = data.miningRoboport.logistic_network
 	if not network then	return updateEveryTicksWaiting,"no logistics network" end
 	local totalRobots = network.all_construction_robots
 	if (not totalRobots) or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
-
-	-- Logistics condition
-	if not circuitConditionIsOk(entity,data) then return updateEveryTicksWaiting,"logistics condition is false" end
 
 	-- Resources
 	local resources = findNearbyResources(entity,data)
@@ -120,19 +130,21 @@ end
 miningSite.remove = function(data)
 	-- final removal of robot mining site
 	local inventoriesToClear = {
-		{data.miningRoboport.get_inventory(1), data.miningRoboport.position},
-		{data.storageChest.get_inventory(defines.inventory.chest), data.storageChest.position},
+		{ data.miningRoboport.get_inventory(1), data.miningRoboport },
+		{ data.storageChest.get_inventory(defines.inventory.chest), data.storageChest },
+		{ data.robotChest.get_inventory(defines.inventory.chest), data.robotChest }
 	}
 	local surface = data.miningRoboport.surface
 	for _,arr in pairs(inventoriesToClear) do
 		if not arr[1].is_empty() then
-			warn("needs to spill: "..serpent.block(arr[1].get_contents()))
-			spillInventory(arr[1], surface, arr[2])
+			local inventory = arr[1].get_contents()
+			warn("needs to spill: "..serpent.block(inventory))
+			spillInventory(arr[1], surface, arr[2].position)
 		end
+		arr[2].destroy()
 	end
-	data.miningRoboport.destroy()
-	data.storageChest.destroy()
 	data.control.destroy()
+	data.controlOverlay.destroy()
 end
 
 
@@ -146,7 +158,8 @@ miningSite.premine = function(entity,data,player)
 	-- Move items from chests into robot mining site (player or bots pick them up)
 	local inventoriesToClear = {
 		data.miningRoboport.get_inventory(1),
-		data.storageChest.get_inventory(defines.inventory.chest)
+		data.storageChest.get_inventory(defines.inventory.chest),
+		data.robotChest.get_inventory(defines.inventory.chest)
 	}
 	for _,invToClear in pairs(inventoriesToClear) do
 		if not moveInventoryToInventory(invToClear,entityInv) then

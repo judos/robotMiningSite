@@ -25,10 +25,15 @@ function migration_0_3_0()
 					second_signal={type="item", name="iron-plate"}}
 				})
 
+			local pos = {x = entity.position.x+1, y=entity.position.y}
+			local robotChest = entity.surface.create_entity({name="robot-chest",position=pos,force=entity.force})
+			robotChest.minable = false
+			robotChest.destructible = false
 
 			control.set_circuit_condition(defines.circuitconditionindex.lamp,condition)
 			data.control = control
 			data.controlOverlay = controlOverlay
+			data.robotChest = robotChest
 			data.logisticsDecider.destroy()
 			data.logisticsDecider = nil
 		else

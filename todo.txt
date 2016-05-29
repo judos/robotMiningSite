@@ -1,4 +1,3 @@
-add robot-chest input/output
 + improve base image of mining Site with red floor showing that whole 3x3 is passive provider
 
 - separate entity: logistics-decider -> neat logistics ?
