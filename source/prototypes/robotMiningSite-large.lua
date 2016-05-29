@@ -53,7 +53,7 @@ overwriteContent(largeEntity, {
 	order = "c[signal]-b[robotMiningSiteArea-1]"
 })
 largeEntity.minable.result = "robotMiningSite-large"
-largeEntity.picture.filename = "__robotMiningSite__/graphics/entity/robotMiningSite-large.png"
+largeEntity.picture.filename = "__robotMiningSite__/graphics/entity/mining-site/robotMiningSite-large.png"
 data:extend({largeEntity})
 
 local extraEntity = deepcopy(data.raw["logistic-container"]["robotMiningSite-new"])
@@ -63,6 +63,6 @@ overwriteContent(extraEntity, {
 	order = "c[signal]-b[robotMiningSiteArea-1]"
 })
 extraEntity.minable.result = "robotMiningSite-extra"
-extraEntity.picture.filename = "__robotMiningSite__/graphics/entity/robotMiningSite-extra.png"
+extraEntity.picture.filename = "__robotMiningSite__/graphics/entity/mining-site/robotMiningSite-extra.png"
 
 data:extend({extraEntity})
