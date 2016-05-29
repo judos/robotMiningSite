@@ -44,6 +44,9 @@ function migration_0_3_0()
 		end
 	end
 
+	global.robotMiningSite.schedule = nil
+	global.robotMiningSite.entityData = nil
+	
 	entities_migration_V2()
 
 	global.robotMiningSite.version = "0.3.0"
