@@ -21,7 +21,7 @@ miningSite.build = function(entity)
 	elseif name:ends("-extra") then
 		sizeSuffix = "-extra"
 	end
-	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
+	local pos = {x = entity.position.x-0.5, y=entity.position.y+0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport"..sizeSuffix,position=pos,force=miningForceForEntity(entity)})
 	miningRoboport.operable = false
 
@@ -29,9 +29,9 @@ miningSite.build = function(entity)
 	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceForEntity(entity)})
 	storageChest.operable = false
 
-	local pos = {x = entity.position.x+1, y=entity.position.y-1}
+	local pos = {x = entity.position.x-1, y=entity.position.y+1}
 	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
-	local pos = {x = entity.position.x+1, y=entity.position.y-1}
+	local pos = {x = entity.position.x-1, y=entity.position.y+1}
 	local controlOverlay = entity.surface.create_entity({name="miningSite-control-overlay",position=pos,force=entity.force})
 	control.connect_neighbour({wire=defines.circuitconnector.green,target_entity=controlOverlay})
 	controlOverlay.set_circuit_condition(defines.circuitconditionindex.lamp,
@@ -40,7 +40,7 @@ miningSite.build = function(entity)
 			second_signal={type="item", name="iron-plate"}}
 		})
 	
-	local pos = {x = entity.position.x+1, y=entity.position.y}
+	local pos = {x = entity.position.x, y=entity.position.y+1}
 	local robotChest = entity.surface.create_entity({name="robot-chest",position=pos,force=entity.force})
 	
 	

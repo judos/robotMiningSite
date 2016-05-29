@@ -4,6 +4,7 @@ local miningRoboport = deepcopy(data.raw.roboport.roboport)
 local chargeEnergyMW = 1
 local energyUsage = 50
 local inputFlowMW = 2.5
+local y = 1.2
 
 overwriteContent(miningRoboport,{
 	name = "mining-roboport",
@@ -21,11 +22,12 @@ overwriteContent(miningRoboport,{
 	construction_radius = miningRange,
 	material_slots_count = 0,
 	robot_slots_count = 5,
-	collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
-	selection_box = {{-1, -1}, {1, 1}},
+	collision_box = {{0,0},{0,0}},
+	selection_box = {{-1, -1-1}, {0.7, 0.7-1}},
+	stationing_offset = {0, -1},
 	order = "zzz",
 	charging_offsets = {
-		{-0.75, -0.25}, {0.75, -0.25}, {0.75, 0.75}, {-0.75, 0.75},
+		{-0.75, -0.25-y}, {0.75, -0.25-y}, {0.75, 0.75-y}, {-0.75, 0.75-y},
 	},
 	construction_radius_visualisation_picture = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-construction-radius-visualization.png",
@@ -43,7 +45,7 @@ overwriteContent(miningRoboport,{
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-base.png",
 		width = 72,
 		height = 68,
-		shift = {0.25, 0.125}
+		shift = {0.25, 0.125-y}
 	},
 	base_patch = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-base-patch.png",
@@ -51,7 +53,7 @@ overwriteContent(miningRoboport,{
 		width = 35,
 		height = 25,
 		frame_count = 1,
-		shift = {0.015625, 0.1015625}
+		shift = {0.015625, 0.1015625-y}
 	},
 	base_animation = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-base-animation.png",
@@ -60,7 +62,7 @@ overwriteContent(miningRoboport,{
 		height = 16,
 		frame_count = 8,
 		animation_speed = 0.5,
-		shift = {-0.26575, -0.96875}
+		shift = {-0.26575, -0.96875-y}
 	},
 	door_animation_up = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-door-up.png",
@@ -68,7 +70,7 @@ overwriteContent(miningRoboport,{
 		width = 26,
 		height = 10,
 		frame_count = 16,
-		shift = {0.0078125, -0.4453125}
+		shift = {0.0078125, -0.4453125-y}
 	},
 	door_animation_down = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-door-down.png",
@@ -76,7 +78,7 @@ overwriteContent(miningRoboport,{
 		width = 26,
 		height = 11,
 		frame_count = 16,
-		shift = {0.0078125, -0.1171875}
+		shift = {0.0078125, -0.1171875-y}
 	},
 	recharging_animation = {
 		filename = "__robotMiningSite__/graphics/entity/mining-roboport/roboport-recharging.png",
@@ -85,6 +87,7 @@ overwriteContent(miningRoboport,{
 		height = 18,
 		frame_count = 16,
 		scale = 1.5,
+		shift = {0, -y},
 		animation_speed = 0.5
 	}
 })

@@ -9,6 +9,8 @@ overwriteContent(control,{
 		type = "electric",
 		usage_priority = "secondary-output",
 	},
+	collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
+	selection_box = {{-0.5, -0.8}, {0.5, 0.5}},
 	order = "zzz",
 	picture_off = {
 		filename = "__robotMiningSite__/graphics/entity/circuitControl-off.png",
@@ -18,7 +20,7 @@ overwriteContent(control,{
 		frame_count = 1,
 		axially_symmetrical = false,
 		direction_count = 1,
-		shift = {-0.021875, 0.16875},
+		shift = {-0.021875, -0.2},
 	},
 	picture_on = {
 		filename = "__robotMiningSite__/graphics/entity/circuitControl-on.png",
@@ -28,7 +30,7 @@ overwriteContent(control,{
 		frame_count = 1,
 		axially_symmetrical = false,
 		direction_count = 1,
-		shift = {-0.021875, 0.16875},
+		shift = {-0.021875, -0.2},
 	},
 })
 
