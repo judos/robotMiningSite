@@ -27,6 +27,7 @@ entities = {}
 
 -- Constants:
 TICK_ASAP = 0 --game.tick used in migration when game variable is not available yet
+TICK_SOON = 1 --game.tick used in cleanup when entity should be schedule randomly in next 1s
 
 -- -------------------------------------------------
 -- init
@@ -45,10 +46,19 @@ function entities_tick()
 	-- schedule events from migration
 	if global.schedule[TICK_ASAP] ~= nil then
 		if global.schedule[game.tick] == nil then global.schedule[game.tick] = {} end
-		for id,entity in pairs(global.schedule[TICK_ASAP]) do
-			global.schedule[game.tick][id] = entity
+		for id,arr in pairs(global.schedule[TICK_ASAP]) do
+			info("scheduled entity "..id.." for now. "..serpent.block(arr))
+			global.schedule[game.tick][id] = arr
 		end
 		global.schedule[TICK_ASAP] = nil
+	end
+	if global.schedule[TICK_SOON] ~= nil then
+		if global.schedule[game.tick] == nil then global.schedule[game.tick] = {} end
+		for id,arr in pairs(global.schedule[TICK_SOON]) do
+			local nextTick = game.tick + math.random(60)
+			global.schedule[nextTick][id] = arr
+		end
+		global.schedule[TICK_SOON] = nil
 	end
 
 	if global.entities_cleanup_required then
@@ -177,10 +187,12 @@ function entities_cleanup_schedule()
 	info("starting cleanup. Expect lag... ")
 	for tick,array in pairs(global.schedule) do
 		if tick < game.tick then
-			for entityId,entity in pairs(array) do
-				if entity.valid then
-					info("found valid entity, scheduling it asap: "..entityId)
-					toSchedule[entityId] = entity
+			for entityId,arr in pairs(array) do
+				if arr.entity.valid then
+					if toSchedule[entityId]==nil then
+						info("found valid entity, scheduling it asap: "..entityId)
+						toSchedule[entityId] = arr.entity
+					end
 				else
 					info("found invalid entity, removing it: "..entityId)
 					entities_remove(entityId)
@@ -191,13 +203,13 @@ function entities_cleanup_schedule()
 		end
 	end
 	-- remove all entities that are already scheduled
-	for tick,array in pairs(global.schedule) do
-		for entityId,entity in pairs(array) do
+	for _,array in pairs(global.schedule) do
+		for entityId,_ in pairs(array) do
 			toSchedule[entityId] = nil
 		end
 	end
-	for entityId,entity in pairs(toSchedule) do
-		scheduleAdd(entity, TICK_ASAP)
+	for _,entity in pairs(toSchedule) do
+		scheduleAdd(entity, TICK_SOON)
 	end
 	info("Cleanup done. Fixed entities "..count)
 end
