@@ -1,4 +1,4 @@
 add robot-chest input/output
-separate entity: logistics-decider -> neat logistics ?
++ improve base image of mining Site with red floor showing that whole 3x3 is passive provider
 
-immediate update check after premining step
+- separate entity: logistics-decider -> neat logistics ?

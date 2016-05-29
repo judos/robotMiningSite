@@ -5,7 +5,6 @@ local SIZE_NORMAL = 1
 local SIZE_LARGE = 2
 local SIZE_EXTRA = 3
 
-
 -- Register entity
 local miningSite = {}
 entities["robotMiningSite-new"] = miningSite
@@ -25,30 +24,39 @@ miningSite.build = function(entity)
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
 	local miningRoboport = entity.surface.create_entity({name="mining-roboport"..sizeSuffix,position=pos,force=miningForceForEntity(entity)})
 	miningRoboport.operable = false
-	miningRoboport.minable = false
-	miningRoboport.destructible = false
 
 	local pos = {x = entity.position.x-0.5, y=entity.position.y-0.5}
 	local storageChest = entity.surface.create_entity({name="invisible-logistic-chest-storage",position=pos,force=miningForceForEntity(entity)})
 	storageChest.operable = false
-	storageChest.minable = false
-	storageChest.destructible = false
 
 	local pos = {x = entity.position.x+1, y=entity.position.y-1}
 	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
-	control.minable = false
-	control.destructible = false
-
-	return {
+	local pos = {x = entity.position.x+1, y=entity.position.y-1}
+	local controlOverlay = entity.surface.create_entity({name="miningSite-control-overlay",position=pos,force=entity.force})
+	control.connect_neighbour({wire=defines.circuitconnector.green,target_entity=controlOverlay})
+	controlOverlay.set_circuit_condition(defines.circuitconditionindex.lamp,
+		{condition={comparator="=",
+			first_signal={type="item", name="iron-plate"},
+			second_signal={type="item", name="iron-plate"}}
+		})
+	
+	local data = {
 		miningRoboport = miningRoboport,
 		storageChest = storageChest,
-		control = control
+		control = control,
+		controlOverlay = controlOverlay,
 	}
+	for _,entity in pairs(data) do
+		entity.minable = false
+		entity.destructible = false
+	end
+	return data
 end
 
 miningSite.tick = function(entity,data)
 	checkSizeOfMiningSite(entity,data)
-
+	setOverlayIsOn(data)
+	
 	-- Move items, check space in chest
 	local spaceLeft = moveItemsToPassiveProvider(entity,data)
 	if not spaceLeft then -- stop mining if chest is full
@@ -205,6 +213,23 @@ function hasEnoughEnergy(entity,data)
 	end
 	local currentEnergy = data.miningRoboport.energy
 	return currentEnergy > miningSiteMinimalEnergy * maxEnergyCapacity * 1000000 --MJ to J conversion
+end
+
+
+function setOverlayIsOn(data)
+	local condition = data.control.get_circuit_condition(defines.circuitconditionindex.lamp)
+	local overlayOn = false
+	if condition.condition.first_signal.name == nil then
+		overlayOn = true
+	end
+	local overlayCondition = {
+		condition = {
+			comparator= (overlayOn and "=" or ">"),
+			first_signal={type="item", name="iron-plate"},
+			second_signal={type="item", name="iron-plate"}
+		}
+	}
+	data.controlOverlay.set_circuit_condition(defines.circuitconditionindex.lamp,overlayCondition)
 end
 
 

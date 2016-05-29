@@ -10,13 +10,14 @@ require "prototypes.robotMiningSite-old"
 require "prototypes.logisticDeciderCombinator"
 
 require "prototypes.fakeGeneratedItem"
-require "prototypes.miningRoboport"
-require "prototypes.miningRobot"
-require "prototypes.circuitControl"
+
 require "prototypes.robotMiningSite"
 require "prototypes.robotMiningSite-large"
 
 require "prototypes.invisibleStorageChest"
+require "prototypes.miningRoboport"
+require "prototypes.miningRobot"
+require "prototypes.circuitControl"
 
 require "prototypes.miningRobotSpeedTechnology"
 require "prototypes.technology"

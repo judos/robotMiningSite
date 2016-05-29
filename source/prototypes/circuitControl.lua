@@ -4,9 +4,10 @@ overwriteContent(control,{
 	light = {intensity = 0, size = 0},
 	icon = nil, --"__robotMiningSite__/graphics/icons/",
 	energy_usage_per_tick = "-1KW",
+	energy_usage = "-1kW",
 	energy_source = {
 		type = "electric",
-		usage_priority = "secondary-output"
+		usage_priority = "secondary-output",
 	},
 	order = "zzz",
 	picture_off = {
@@ -31,6 +32,12 @@ overwriteContent(control,{
 	},
 })
 
-data:extend({
-	control
-})
+data:extend({	control })
+
+
+local controlOverlay = deepcopy(control)
+controlOverlay.name = "miningSite-control-overlay"
+controlOverlay.selection_box = nil
+controlOverlay.picture_off.width = 0
+controlOverlay.picture_off.height = 0
+data:extend({ controlOverlay })
