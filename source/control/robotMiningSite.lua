@@ -33,12 +33,17 @@ miningSite.build = function(entity)
 	local control = entity.surface.create_entity({name="miningSite-control",position=pos,force=entity.force})
 	local pos = {x = entity.position.x-1, y=entity.position.y+1}
 	local controlOverlay = entity.surface.create_entity({name="miningSite-control-overlay",position=pos,force=entity.force})
-	control.connect_neighbour({wire=defines.circuitconnector.green,target_entity=controlOverlay})
-	controlOverlay.set_circuit_condition(defines.circuitconditionindex.lamp,
-		{condition={comparator="=",
-			first_signal={type="item", name="iron-plate"},
-			second_signal={type="item", name="iron-plate"}}
-		})
+	control.connect_neighbour{wire=defines.wire_type.green,target_entity=controlOverlay}
+	
+	controlOverlay.get_or_create_control_behavior().circuit_condition = {
+		{
+			condition={
+				comparator="=",
+				first_signal={type="item", name="iron-plate"},
+				second_signal={type="item", name="iron-plate"}
+			}
+		}
+	}
 	
 	local pos = {x = entity.position.x, y=entity.position.y+1}
 	local robotChest = entity.surface.create_entity({name="robot-chest",position=pos,force=entity.force})
@@ -105,7 +110,7 @@ miningSite.tick = function(entity,data)
 		local position = resources[n].position
 
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
-			local beltsCount = entity.surface.count_entities_filtered{area={position,position}, type="transport-belt"}
+			local beltsCount = entity.surface.count_entities_filtered{position=position, type="transport-belt"}
 			if beltsCount == 0 then
 				local itemStacksGenerated = mineResource(resources[n])
 				for _,itemStack in pairs(itemStacksGenerated) do
@@ -230,7 +235,8 @@ end
 
 
 function setOverlayIsOn(data)
-	local condition = data.control.get_circuit_condition(defines.circuitconditionindex.lamp)
+	local behavior = data.control.get_or_create_control_behavior()
+	local condition = behavior.circuit_condition
 	local overlayOn = false
 	if condition.condition.first_signal.name == nil then
 		overlayOn = true
@@ -242,14 +248,15 @@ function setOverlayIsOn(data)
 			second_signal={type="item", name="iron-plate"}
 		}
 	}
-	data.controlOverlay.set_circuit_condition(defines.circuitconditionindex.lamp,overlayCondition)
+	data.controlOverlay.get_or_create_control_behavior().circuit_condition = overlayCondition
 end
 
 
 function circuitConditionIsOk(entity,data)
 	if entity.to_be_deconstructed(entity.force) then return false end
 
-	local condition = data.control.get_circuit_condition(defines.circuitconditionindex.lamp)
+	local behavior = data.control.get_or_create_control_behavior()
+	local condition = behavior.circuit_condition
 	if not condition then return true end
 	local parameters = condition.condition
 

@@ -1,7 +1,7 @@
-require "defines"
 require "config"
 require "libs.functions"
-require "libs.controlFunctions"
+require "libs.control.controlFunctions"
+require "libs.control.entities"
 
 require "control.robotMiningSite"
 require "control.miningRobot"
