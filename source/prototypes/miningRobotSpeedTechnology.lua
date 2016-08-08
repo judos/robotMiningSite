@@ -2,7 +2,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "mining-robot-speed-1x",
-		icon = "__base__/graphics/technology/logistic-robot-speed.png",
+		icon = "__base__/graphics/technology/worker-robots-speed.png",
 		effects = {},
 		prerequisites = {
 			"mining-robotics"
