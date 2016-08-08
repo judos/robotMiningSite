@@ -3,8 +3,8 @@ overwriteContent(control,{
 	name = "miningSite-control",
 	light = {intensity = 0, size = 0},
 	icon = nil, --"__robotMiningSite__/graphics/icons/",
-	energy_usage_per_tick = "-1KW",
-	energy_usage = "-1kW",
+	energy_usage_per_tick = "0W",
+	energy_usage = "0W",
 	energy_source = {
 		type = "electric",
 		usage_priority = "secondary-output",
