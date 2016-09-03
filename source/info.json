@@ -1,6 +1,6 @@
 {
 	"name": "robotMiningSite",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"title": "Robot Mining Site",
 	"author": "judos",
 	"description": "Adds mining robots and a robot mining site which can be configured to mine nearby resources",
