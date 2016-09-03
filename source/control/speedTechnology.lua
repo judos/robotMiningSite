@@ -19,13 +19,13 @@ end)
 function updateMiningRobotSpeedForForce(force) 
 	local miningForceName = miningForceForForce(force)
 	local miningForce = game.forces[miningForceName]
+	local speed = 0
 	if global.robotMiningSite.speedResearch == 1 then
-		miningForce.logistic_robot_speed_modifier = 0.4
+		speed = 0.4
 	elseif global.robotMiningSite.speedResearch == 2 then
-		miningForce.logistic_robot_speed_modifier = 0.8
+		speed = 0.8
 	elseif global.robotMiningSite.speedResearch == 3 then
-		miningForce.logistic_robot_speed_modifier = 1.2
-	else
-		miningForce.logistic_robot_speed_modifier = 0
+		speed = 1.2
 	end
+	miningForce.worker_robots_speed_modifier = speed
 end
