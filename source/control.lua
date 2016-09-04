@@ -17,6 +17,7 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 
 -- global data stored and used:
 -- global.robotMiningSite.speedResearch = $research_level
+--                       .version = $version
 
 ---------------------------------------------------
 -- Used API
@@ -30,26 +31,31 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 script.on_init(function()
 	onLoad()
 end)
-script.on_load(function()
-	onLoad()
-end)
 
 local checkMigration = true
 function onLoad()
+	entities_init()
+end
+
+script.on_configuration_changed(function()
 	if not global then
 		global = {}
 		game.forces.player.reset_technologies()
 		game.forces.player.reset_recipes()
 	end
---	info("global data: "..serpent.block(global))
-	if not global.robotMiningSite then global.robotMiningSite = {version=modVersion} end
-	local d = global.robotMiningSite
-	if not d.schedule then d.schedule = {} end
-	if not d.entityData then d.entityData={} end
-	speedTechnologyInit()
---	info("global data: "..serpent.block(global))
-	entities_init()
-end
+	if not global.robotMiningSite then
+		global.robotMiningSite = {}
+	end
+	local g = global.robotMiningSite
+	info("Previous robotMiningSite version: "..g.version)
+	if not g.version then
+		g.version = "0.4.1"
+		if not d.schedule then d.schedule = {} end
+		if not d.entityData then d.entityData={} end
+		speedTechnologyInit()
+	end
+	info("Migrated to version "..g.version)
+end)
 
 ---------------------------------------------------
 -- Tick
