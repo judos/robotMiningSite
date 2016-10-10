@@ -8,7 +8,7 @@ function migration_0_3_0()
 
 	-- remove logistics decider, add circuit control and copy over condition
 	for entityId,data in pairs(global.entityData) do
-		local entity = entityOfId(entityId,"robotMiningSite-")
+		local entity = entityOfId_v21(entityId,"robotMiningSite-")
 		if entity and entity.valid and data.logisticsDecider.valid then
 			local condition = data.logisticsDecider.get_circuit_condition(defines.circuitconditionindex.decider_combinator)
 

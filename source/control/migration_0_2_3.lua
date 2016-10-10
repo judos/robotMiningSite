@@ -12,7 +12,7 @@ function migration_0_2_3()
 		for idEntity,entity in pairs(arr) do
 			if not entity.valid then
 				local data = global.robotMiningSite.entityData[idEntity]
-				local entity = entityOfId(idEntity,data.name)
+				local entity = entityOfId_v21(idEntity,data.name)
 				if entity then
 					arr[idEntity] = entity
 					local chestInv = data.providerChest.get_inventory(defines.inventory.chest)
