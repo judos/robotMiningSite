@@ -30,17 +30,16 @@ local function initGuiForPlayerName(playerName)
 	if is[playerName].recent == nil then is[playerName].recent = {} end
 end
 
-local function checkBoxForItem(itemName)
-	local item = game.item_prototypes[itemName]
-	local tip = item.localised_name
+
+local function checkBoxForItem(itemName)			
 	return {
 		type = "sprite-button",
 		name = "itemSelection.item."..itemName,
 		style = "slot_button_style",
-		tooltip = tip,
 		sprite = "item/"..itemName
 	}
 end
+
 
 local function selectItem(playerData,player,itemName)
 	-- add to recent items
@@ -64,26 +63,34 @@ end
 
 local function rebuildItemList(player)
 	local frame = player.gui.left.itemSelection.main
-	if frame.items then
-		frame.items.destroy()
+	if frame.itemsScrollPane then
+		frame.itemsScrollPane.destroy()
 	end
 
+	local scroll = frame.add{type="scroll-pane", name="itemsScrollPane"}
+	--scroll.style.maximal_width=450  --Needed to produce horizontal scroll bars
+	scroll.style.maximal_height=180 --Needed to produce vertical scroll bars
+	scroll.horizontal_scroll_policy = "never"
+	scroll.vertical_scroll_policy = "auto"
+	local items = scroll.add{type="table",name="items",colspan=mainMaxEntries}
+	
 	local filter = frame.search["itemSelection.field"].text
-	frame.add{type="table",name="items",colspan=mainMaxEntries}
-	local index = 1
+	local nr = 0
 	for name,prototype in pairs(game.item_prototypes) do
-		if filter == "" or string.find(name,filter) then
-			local checkbox = checkBoxForItem(name)
-			local status, err = pcall(function() frame.items.add(checkbox) end)
-			if not status then
-				warn("Error occured with item: "..name..". The style is missing probably because item was registered in data-final-fixes.lua instead of before. The item will not be displayed in the list.")
-				warn(err)
-			end
-
-			index = index + 1
-			if index > mainMaxRows*mainMaxEntries then break end
+		if not prototype.has_flag("hidden") and (filter == "" or string.find(name,filter)) then
+			--local status, err = pcall(function() 
+				local x = items.add(checkBoxForItem(name))
+				x.tooltip = game.item_prototypes[name].localised_name
+				nr = nr +1
+			--end)
+			--if not status then
+			--	warn("Error occured with item: "..name..". The style is missing probably because item was registered in data-final-fixes.lua instead of before. The item will not be displayed in the list.")
+			--	warn(err)
+			--end
 		end
+		--if nr==36 then break end
 	end
+	warn("Number: "..tostring(nr))
 end
 
 ------------------------------------
@@ -116,10 +123,11 @@ itemSelection_open = function(player,method)
 		frame.recent.add{type="label",name="title",caption={"",{"recent"},":"}}
 		frame.recent.add{type="table",name="items",colspan=#playerData.recent}
 		for _,itemName in pairs(playerData.recent) do
-			frame.recent.items.add(checkBoxForItem(itemName))
+			local x = frame.recent.items.add(checkBoxForItem(itemName))
+			x.tooltip = game.item_prototypes[itemName].localised_name
 		end
 	end
-		
+
 	frame.add{type="table",name="special",colspan=2}
 	frame.special.add{type="label",name="title",caption={"",{"special"},":"}}
 	frame.special.add{type="table",name="items",colspan=1}
@@ -159,5 +167,6 @@ itemSelection_gui_event = function(guiEvent,player)
 		warn("Unknown fieldName for itemSelection_gui_event: "..tostring(fieldName))
 	end
 end
+
 
 

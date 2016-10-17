@@ -14,12 +14,7 @@ gui = {} -- [$entityName] = { open = $function(player,entity),
 --                            close = $function(player),
 --                            click = $function(nameArr, player, entity) }
 
--- Required Calls from control.lua:
--- gui_tick()
--- gui_init()
-
--- Helper functions:
--- gui_playersWithOpenGuiOf(entity) : {x:LuaPlayer, ...}
+-- gui_scheduleEvent($uiComponentIdentifier,$player)
 
 --------------------------------------------------
 -- Global data
@@ -47,16 +42,11 @@ local function handleEvent(uiComponentIdentifier,player)
 				local entity = global.gui.playerData[player.name].openEntity
 				gui[entityName].click(guiEvent,player,entity)
 			end
-		elseif entityName == nil then
-			warn("No entityName found for player "..player.name)
-			warn(global.gui.playerData[player.name])
-		else
-			warn("No gui registered for "..entityName)
 		end
 		return true
 	else
 		-- gui event might be from other mods
-		--info("unknown gui event occured: "..serpent.block(uiComponentIdentifier))
+		info("unknown gui event occured: "..serpent.block(uiComponentIdentifier))
 	end
 end
 
@@ -124,24 +114,12 @@ end
 --------------------------------------------------
 
 script.on_event(defines.events.on_gui_click, function(event)
+	if event.element.style and event.element.style.name then
+		if event.element.style.name:starts("item-") then
+			event.element.state = true
+		end
+	end
 	local player = game.players[event.player_index]
 	local uiComponentIdentifier = event.element.name
 	return handleEvent(uiComponentIdentifier,player)
 end)
-
---------------------------------------------------
--- Helper functions
---------------------------------------------------
-
-function gui_playersWithOpenGuiOf(entity)
-	local result = {}
-	for _,player in pairs(game.players) do
-		if player.connected then
-			local openEntity = player.opened
-			if openEntity == entity then
-				table.insert(result,player)
-			end
-		end
-	end
-	return result
-end
