@@ -30,27 +30,25 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 -- Loading
 ---------------------------------------------------
 script.on_init(function()
-	print("init")
+	migration()
 	entities_init()
 end)
 
 script.on_configuration_changed(function()
-	if not global.robotMiningSite then
-		global.robotMiningSite = {}
-	end
 	migration()
 end)
 
 
 function migration()
+	if not global.robotMiningSite then
+		global.robotMiningSite = {}
+	end
 	local g = global.robotMiningSite
-	game.write_file("global-data.txt",serpent.block(g))
 	local prevVersion = g.version
 	if not g.version then
 		g.version = "0.4.1"
-		if not d.schedule then d.schedule = {} end
-		if not d.entityData then d.entityData={} end
 		speedTechnologyInit()
+		info("Initialised")
 	end
 	if g.version < "0.2.0" then migration_0_2_0() end
 	if g.version < "0.2.3" then migration_0_2_3() end
@@ -62,7 +60,7 @@ function migration()
 		g.version = modVersion
 	end
 	if g.version ~= prevVersion then
-		info("Previous version: "..prevVersion.." migrated to "..g.version)
+		info("Previous version: "..tostring(prevVersion).." migrated to "..g.version)
 	end
 end
 
