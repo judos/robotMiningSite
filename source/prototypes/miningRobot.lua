@@ -6,11 +6,11 @@ miningRobot.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot.pn
 miningRobot.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot.png"
 miningRobot.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working.png"
 
-miningRobot.speed = 0.05
-miningRobot.max_energy = "1MJ"
-miningRobot.energy_per_tick = "0.02kJ"
+miningRobot.speed = 0.04
+miningRobot.max_energy = "3MJ" --double of construction robots
+miningRobot.energy_per_tick = "0.1kJ" --double of construction robots
 miningRobot.speed_multiplier_when_out_of_energy = 0.5
-miningRobot.energy_per_move = "3kJ"
+miningRobot.energy_per_move = "15kJ" --triple of construction robots
 miningRobot.minable.result = "mining-robot"
 data:extend({miningRobot})
 
