@@ -46,7 +46,7 @@ function migration()
 	local g = global.robotMiningSite
 	local prevVersion = g.version
 	if not g.version then
-		g.version = "0.4.1"
+		g.version = "0.5.0"
 		speedTechnologyInit()
 		info("Initialised")
 	end

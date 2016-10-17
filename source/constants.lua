@@ -1,6 +1,6 @@
 
-modVersion = "0.4.1"
+modVersion = "0.5.0"
 modName = "robotMiningSite"
 fullModName = "robotMiningSite"
 
-libLog.testing = true
+libLog.testing = false -- enable logging (player console output)
