@@ -17,7 +17,7 @@ script.on_event(defines.events.on_research_finished,function(event)
 end)
 
 function updateMiningRobotSpeedForForce(force) 
-	local miningForceName = miningForceForForce(force)
+	local miningForceName = miningForceForForce(force.name)
 	local miningForce = game.forces[miningForceName]
 	local speed = 0
 	if global.robotMiningSite.speedResearch == 1 then
