@@ -31,7 +31,6 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 ---------------------------------------------------
 script.on_init(function()
 	migration()
-	entities_init()
 end)
 
 script.on_configuration_changed(function()
@@ -40,6 +39,7 @@ end)
 
 
 function migration()
+	entities_init()
 	if not global.robotMiningSite then
 		global.robotMiningSite = {}
 	end

@@ -7,6 +7,7 @@ local SIZE_EXTRA = 3
 
 -- Register entity
 local miningSite = {}
+local f = {}
 entities["robotMiningSite-new"] = miningSite
 entities["robotMiningSite-large"] = miningSite
 entities["robotMiningSite-extra"] = miningSite
@@ -64,6 +65,17 @@ miningSite.build = function(entity)
 end
 
 miningSite.tick = function(entity,data)
+	local nextUpdateInTicks,msg,res = f.checkCondition(entity,data)
+	if msg == nil then
+		moveInventoryToInventory(data.robotChest.get_inventory(defines.inventory.chest),data.miningRoboport.get_inventory(1))
+		f.work(entity,data,res)
+	else
+		moveInventoryToInventory(data.miningRoboport.get_inventory(1),data.robotChest.get_inventory(defines.inventory.chest))
+	end
+	return nextUpdateInTicks,msg
+end
+
+f.checkCondition = function(entity,data)
 	checkSizeOfMiningSite(entity,data)
 	setOverlayIsOn(data)
 	
@@ -78,23 +90,25 @@ miningSite.tick = function(entity,data)
 
 	-- Logistics condition
 	if not circuitConditionIsOk(entity,data) then
-		moveInventoryToInventory(data.miningRoboport.get_inventory(1),data.robotChest.get_inventory(defines.inventory.chest))
 		return updateEveryTicksWaiting,"logistics condition is false"
-	else
-		moveInventoryToInventory(data.robotChest.get_inventory(defines.inventory.chest),data.miningRoboport.get_inventory(1))
 	end
-
-	-- Network
-	local network = data.miningRoboport.logistic_network
-	if not network then	return updateEveryTicksWaiting,"no logistics network" end
-	local totalRobots = network.all_construction_robots
-	if (not totalRobots) or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
-
+	
 	-- Resources
 	local resources = findNearbyResources(entity,data)
 	if not resources or #resources == 0 then
 		return updateEveryTicksWaiting,"no resources available"
 	end
+	
+	return updateEveryTicks,nil,resources
+end
+
+
+f.work = function(entity,data,resources)
+	-- Network
+	local network = data.miningRoboport.logistic_network
+	if not network then	return updateEveryTicksWaiting,"no logistics network" end
+	local totalRobots = network.all_construction_robots
+	if (not totalRobots) or totalRobots==0 then	return updateEveryTicksWaiting,"no robots in network" end
 
 	local robots = network.available_construction_robots
 	if not data.freeBefore then data.freeBefore = robots end
@@ -127,9 +141,9 @@ miningSite.tick = function(entity,data)
 	end
 
 	if data.size == SIZE_EXTRA then
-		return updateEveryTicks*2,"working..."
+		return updateEveryTicks*2,nil
 	end
-	return updateEveryTicks,"working..."
+	return updateEveryTicks,nil
 end
 
 miningSite.remove = function(data)
