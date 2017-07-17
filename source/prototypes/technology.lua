@@ -1,3 +1,5 @@
+require "libs.prototypes.technology"
+
 data:extend({
   {
     type = "technology",

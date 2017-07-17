@@ -7,7 +7,7 @@ if settings.startup["robotMiningSite_EasyT1"].value == true then
 end
 
 require "config"
-require "libs.functions"
+require "libs.all"
 
 require "prototypes.fakeGeneratedItem"
 

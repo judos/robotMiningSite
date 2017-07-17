@@ -1,6 +1,5 @@
 require "config"
-require "libs.functions"
-require "libs.control.controlFunctions"
+require "libs.all"
 require "libs.control.entities"
 
 require "control.robotMiningSite"
