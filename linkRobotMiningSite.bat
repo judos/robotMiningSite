@@ -1,0 +1,1 @@
+mklink /j "mods/robotMiningSite_0.5.0" "D:\modding\factorio\robotMiningSite\source"
