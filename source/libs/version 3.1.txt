@@ -1,3 +1,7 @@
+3.1 robotMiningSite
+	resources: fix error with nil values for resources without probabilities
+	logging: do not enforce player logging when testing flag is set
+
 3.0 beltSorter
 	remove itemSelection dialog
 	MIGRATION:

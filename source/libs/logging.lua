@@ -9,7 +9,7 @@ if libLog.testing then
 	-- 1=info 2=warning 3=error
 	libLog.debug_master = true
 	libLog.debug_level = libLog.debug_level or 1
-	libLog.always_player_print = true
+	libLog.always_player_print = (libLog.always_player_print == nil) and true or libLog.always_player_print
 	libLog.stack_trace = (libLog.stack_trace == nil) and true or libLog.stack_trace;
 end
 
