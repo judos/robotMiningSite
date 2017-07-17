@@ -1,3 +1,11 @@
+if not robotMiningSite then robotMiningSite = {} end
+if not robotMiningSite.settings then robotMiningSite.settings = {} end
+
+
+if settings.startup["robotMiningSite_EasyT1"].value == true then
+  robotMiningSite.settings.easyT1 = true
+end
+
 require "config"
 require "libs.functions"
 

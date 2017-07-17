@@ -15,6 +15,22 @@ data:extend({
 })
 
 -- Recipe
+if robotMiningSite.settings.easyT1 == true then
+data:extend({
+	{
+		type = "recipe",
+		name = "robotMiningSite",
+		enabled = "false",
+		ingredients = {
+			{"steel-plate", 20},
+			{"electronic-circuit", 10},
+			{"advanced-circuit", 5},
+		},
+		result = "robotMiningSite",
+		energy_required = 1,
+	},
+})
+else
 data:extend({
 	{
 		type = "recipe",
@@ -29,6 +45,8 @@ data:extend({
 		energy_required = 1,
 	},
 })
+end
+
 
 -- Entity
 data:extend({
