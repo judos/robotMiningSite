@@ -2,18 +2,19 @@ libLog = {}
 
 require "constants"
 
--- libLog.debug_master -- Must be set to true for logging to be active
-
+if libLog.debug_master == nil then
+	libLog.debug_master = true -- Master switch for debugging, prints debug stuff into the shell where factorio was started from
+end
+if libLog.debug_level == nil then
+	libLog.debug_level = 2
+end
 if libLog.testing then
-	-- Master switch for debugging, prints debug stuff into the shell where factorio was started from
-	-- 1=info 2=warning 3=error
-	libLog.debug_master = true
-	libLog.debug_level = libLog.debug_level or 1
+	libLog.debug_master = true -- Master switch for debugging, prints debug stuff into the shell where factorio was started from
+	libLog.debug_level = 1 -- 1=info 2=warning 3=error
 	libLog.always_player_print = true
-	libLog.stack_trace = (libLog.stack_trace == nil) and true or libLog.stack_trace;
 end
 
-libLog.debug_level = libLog.debug_level or 2
+libLog.stack_trace = true
 
 
 function info(message)
@@ -30,32 +31,29 @@ function assert2(value,message)
 	assert(value,message.."\n"..debug.traceback())
 end
 
-function x(object)
-	return serpent.block(object)
-end
-
 function libLog.debug(message,level)
 	if not level then level="ANY" end
-	if not libLog.debug_master then return end
-	if type(message) ~= "string" then
-		message = serpent.block(message)
+	if libLog.debug_master then
+		if type(message) ~= "string" then
+			message = serpent.block(message)
+		end
+		local data = {
+			time = libLog.gameTime(),
+			level = level,
+			name = fullModName,
+			caller = libLog.caller(),
+			message = message
+		}
+		--local str = .." [ "..level.." "..fullModName.." ] "..libLog.caller()..": "..message
+		if level == "ERROR" or libLog.always_player_print then
+			libLog.PlayerPrint(formatWith("[%name - %caller]: %message",data))
+		end
+		local str = formatWith("%time [ %level %name - %caller]: %message",data)
+		if libLog.stack_trace then
+			str = str.."\n"..libLog.traceback()
+		end
+		print(str)
 	end
-	local data = {
-		time = libLog.gameTime(),
-		level = level,
-		name = fullModName,
-		caller = libLog.caller(),
-		message = message
-	}
-	--local str = .." [ "..level.." "..fullModName.." ] "..libLog.caller()..": "..message
-	if level == "ERROR" or libLog.always_player_print then
-		game.print(formatWith("[%name - %caller]: %message",data))
-	end
-	local str = formatWith("%time [ %level %name - %caller]: %message",data)
-	if libLog.stack_trace then
-		str = str.."\n"..libLog.traceback()
-	end
-	print(str)
 end
 
 function libLog.caller()
@@ -65,10 +63,9 @@ function libLog.caller()
 	local file,appendix
 	repeat
 		local l = table.remove(lines,1)
-		file,appendix = l:match("([%w_]+)(.lua:%d+)")
+		file,appendix = l:match("(%a+)(.lua:%d+)")
 	until file ~= "logging"
-	if not file then return s end
-	return tostring(file)..tostring(appendix)
+	return file..appendix
 end
 
 function libLog.traceback()
@@ -97,3 +94,11 @@ function libLog.gameTime()
 	return h..":"..m..":"..s
 end
 
+function libLog.PlayerPrint(message)
+	if not game then
+		return
+	end
+	for _,player in pairs(game.players) do
+		player.print(message)
+	end
+end

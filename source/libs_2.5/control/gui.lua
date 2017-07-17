@@ -1,6 +1,5 @@
-
 -- Constants:
-local guiUpdateEveryTicks = 5
+local guiUpdateEveryTicks = 15
 
 --------------------------------------------------
 -- API
@@ -21,7 +20,6 @@ gui = {} -- [$entityName] = { open = $function(player,entity),
 
 -- Helper functions:
 -- gui_playersWithOpenGuiOf(entity) : {x:LuaPlayer, ...}
--- gui_scheduleEvent($uiComponentIdentifier,$player)
 
 --------------------------------------------------
 -- Global data
@@ -30,36 +28,19 @@ gui = {} -- [$entityName] = { open = $function(player,entity),
 -- This helper file uses the following global data variables:
 -- global.gui.playerData[$playerName].openGui = $(name of opened entity)
 --                                   .openEntity = $(reference of LuaEntity)
---     "      events[$tick] = { {$uiComponentIdentifier, $player}, ... }
---     "      version = $number
+--            events[$tick] = { {$uiComponentIdentifier, $player}, ... }
 
 --------------------------------------------------
 -- Implementation
 --------------------------------------------------
 
-
-function gui_init()
-	if global.gui == nil then
-		global.gui = {
-			playerData = {},
-			events = {},
-			version = 1
-		}
-	end
-	local prevGui = global.gui.version
-	if not global.gui.version then
-		global.gui.version = 1
-		global.itemSelection = nil
-	end
-	if global.gui.version ~= prevGui then
-		info("Migrated gui version to "..tostring(global.gui.version))
-	end
-end
-
 local function handleEvent(uiComponentIdentifier,player)
 	local guiEvent = split(uiComponentIdentifier,".")
 	local eventIsForMod = table.remove(guiEvent,1)
-	if eventIsForMod == modName then
+	if eventIsForMod == "itemSelection" then
+		itemSelection_gui_event(guiEvent,player)
+		return false
+	elseif eventIsForMod == modName then
 		local entityName = global.gui.playerData[player.name].openGui
 		if entityName and gui[entityName] then
 			if gui[entityName].click ~= nil then
@@ -75,13 +56,23 @@ local function handleEvent(uiComponentIdentifier,player)
 		return true
 	else
 		-- gui event might be from other mods
-		info("unknown gui event occured: "..serpent.block(uiComponentIdentifier))
+		--info("unknown gui event occured: "..serpent.block(uiComponentIdentifier))
 	end
 end
 
 function gui_scheduleEvent(uiComponentIdentifier,player)
-	global.gui.events = global.gui.events or {}
+	global.gui.events = {}
 	table.insert(global.gui.events,{uiComponentIdentifier=uiComponentIdentifier,player=player})
+end
+
+
+function gui_init()
+	if global.gui == nil then
+		global.gui = {
+			playerData = {},
+			events = {}
+		}
+	end
 end
 
 local function playerCloseGui(player,playerData,openGui)
@@ -104,13 +95,12 @@ end
 function gui_tick()
 	if game.tick % guiUpdateEveryTicks ~= 0 then return end
 	if global.gui.events ~= nil then
-		local events = global.gui.events
-		global.gui.events = nil
-		if #events > 0 then
-			for _,event in pairs(events) do
+		if #global.gui.events > 0 then
+			for _,event in pairs(global.gui.events) do
 				handleEvent(event.uiComponentIdentifier, event.player)
 			end
 		end
+		global.gui.event = {}
 	end
 	for _,player in pairs(game.players) do
 		if player.connected then
@@ -129,20 +119,15 @@ function gui_tick()
 	end
 end
 
-
 --------------------------------------------------
 -- Event registration
 --------------------------------------------------
 
-local function handleGuiEvent(event)
+script.on_event(defines.events.on_gui_click, function(event)
 	local player = game.players[event.player_index]
 	local uiComponentIdentifier = event.element.name
 	return handleEvent(uiComponentIdentifier,player)
-end
-
-script.on_event(defines.events.on_gui_click,handleGuiEvent)
-script.on_event(defines.events.on_gui_text_changed,handleGuiEvent)
-script.on_event(defines.events.on_gui_elem_changed,handleGuiEvent)
+end)
 
 --------------------------------------------------
 -- Helper functions
