@@ -1,4 +1,6 @@
 require "config"
+require "libs.control.inventory"
+require "libs.control.resources"
 
 -- Constants:
 local SIZE_NORMAL = 1
@@ -271,38 +273,8 @@ function circuitConditionIsOk(entity,data)
 
 	local behavior = data.control.get_or_create_control_behavior()
 	local condition = behavior.circuit_condition
-	if not condition then return true end
-	local parameters = condition.condition
-
-	local checkFirstItem = parameters.first_signal.name
-	if not checkFirstItem then return true end -- no condition specified
-
-	local network = entity.logistic_network
-	local actualAmount
-	if network then
-		actualAmount = network.get_item_count(checkFirstItem)
-	else
-		actualAmount = entity.get_inventory(defines.inventory.chest).get_item_count(checkFirstItem)
+	if condition.condition.first_signal.name == nil and not behavior.connect_to_logistic_network then
+		return true
 	end
-
-	local compareAgainstAmount
-	if parameters.second_signal then
-		local checkSecondItem = parameters.second_signal.name
-		if network then
-			compareAgainstAmount = network.get_item_count(checkSecondItem)
-		else
-			compareAgainstAmount = entity.get_inventory(defines.inventory.chest).get_item_count(checkSecondItem)
-		end
-	else
-		compareAgainstAmount = parameters.constant
-	end
-
-	local diff = actualAmount - compareAgainstAmount
-	if parameters.comparator == ">" then
-		return diff > 0
-	elseif parameters.comparator == "=" then
-		return diff == 0
-	else
-		return diff < 0
-	end
+	return not behavior.disabled
 end
