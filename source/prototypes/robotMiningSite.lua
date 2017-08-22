@@ -8,7 +8,7 @@ data:extend({
 		place_result = "robotMiningSite-new",
 		flags = {"goes-to-quickbar"},
 		subgroup = "logistic-network",
-		order = "c[signal]-b[robotMiningSite]",
+		order = "c[signal]-b[robotMiningSite]1",
 		category = "crafting",
 		stack_size = 50,
 	},

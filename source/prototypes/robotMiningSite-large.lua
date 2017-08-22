@@ -4,7 +4,7 @@ overwriteContent(largeItem, {
 	name = "robotMiningSite-large",
 	icon = "__robotMiningSite__/graphics/icons/robotMiningSite-large.png",
 	place_result = "robotMiningSite-large",
-	order = "c[signal]-b[robotMiningSite-1]"
+	order = "c[signal]-b[robotMiningSite]2"
 })
 data:extend({largeItem})
 
@@ -13,7 +13,7 @@ overwriteContent(extraItem, {
 	name = "robotMiningSite-extra",
 	icon = "__robotMiningSite__/graphics/icons/robotMiningSite-extra.png",
 	place_result = "robotMiningSite-extra",
-	order = "c[signal]-b[robotMiningSite-2]"
+	order = "c[signal]-b[robotMiningSite]3"
 })
 data:extend({extraItem})
 
