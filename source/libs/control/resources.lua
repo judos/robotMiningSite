@@ -5,24 +5,27 @@ function getMiningResultItems(resource)
 	if not resource.valid then return {} end
 	local products = resource.prototype.mineable_properties.products
 	local resultStacks = {}
+	local isInfinite = resource.prototype.infinite_resource
+	local yield = resource.amount / resource.prototype.normal_resource_amount
+				
 	for _,itemDescription in pairs(products) do
 		if itemDescription.type == "item" then
 			local prob = itemDescription.probability or 1
-			local isInfinite = resource.prototype.infinite_resource
 			if isInfinite then
-				local yield = resource.amount / resource.prototype.normal_resource_amount
-				if yield > 1 then yield = 1 end
 				prob = prob * yield
 			end
 			local randomValue = math.random()
 			if randomValue<prob then
 				local amount = math.random(itemDescription.amount_min or 1, itemDescription.amount_max or 1)
 				table.insert(resultStacks,{name=itemDescription.name, count = amount})
-			elseif isInfinite then
-				table.insert(resultStacks,{name="fake-generated-item", count = 1})
 			end
 		end
 	end
+	
+	if isInfinite and #resultStacks == 0 then
+		table.insert(resultStacks,{name="fake-generated-item", count = 1})
+	end
+	
 	return resultStacks
 end
 
