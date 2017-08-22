@@ -9,5 +9,5 @@ function migration_0_4_1()
 	entities_init()
 	
 	global.robotMiningSite.version = "0.4.1"
-	PlayerPrint("RobotMiningSite migrated to 0.4.1")
+	game.print("RobotMiningSite migrated to 0.4.1")
 end
