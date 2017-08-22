@@ -10,10 +10,7 @@ function getMiningResultItems(resource)
 			local prob = itemDescription.probability or 1
 			local isInfinite = resource.prototype.infinite_resource
 			if isInfinite then
-				--NOTE: The minimum_resource_amount is calculated wrongly and the normal_resource_amount isn't available at all
-				--See interface request here: https://forums.factorio.com/viewtopic.php?f=28&t=24202&p=152421#p152421
-				--local yield = resource.amount / (10* resource.prototype.minimum_resource_amount)
-				local yield = 0.333
+				local yield = resource.amount / resource.prototype.normal_resource_amount
 				if yield > 1 then yield = 1 end
 				prob = prob * yield
 			end
