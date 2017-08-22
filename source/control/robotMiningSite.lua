@@ -69,9 +69,11 @@ end
 miningSite.tick = function(entity,data)
 	local nextUpdateInTicks,msg,res = f.checkCondition(entity,data)
 	if msg == nil then
+		-- move robots into roboport
 		moveInventoryToInventory(data.robotChest.get_inventory(defines.inventory.chest),data.miningRoboport.get_inventory(1))
 		f.work(entity,data,res)
 	else
+		-- move robots into robot chest
 		moveInventoryToInventory(data.miningRoboport.get_inventory(1),data.robotChest.get_inventory(defines.inventory.chest))
 	end
 	return nextUpdateInTicks,msg
@@ -130,6 +132,9 @@ f.work = function(entity,data,resources)
 			if beltsCount == 0 then
 				local itemStacksGenerated = mineResource(resources[n])
 				for _,itemStack in pairs(itemStacksGenerated) do
+					if resourceMapping[itemStack["name"]] then
+						itemStack["name"] = resourceMapping[itemStack["name"]]
+					end
 					local itemEntity = entity.surface.create_entity{name="item-on-ground", position=position, stack=itemStack}
 					if itemEntity and itemEntity.valid then
 						itemEntity.order_deconstruction(forceName)

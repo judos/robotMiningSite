@@ -11,3 +11,9 @@ miningSiteMinimalEnergy = 4/5 -- stop mining if roboport has less energy (percen
 capacityRoboport = 100
 capacityRoboportLarge = 400
 capacityRoboportExtra = 1000
+
+
+-- map certain items gained by robots to yield other items than expected
+resourceMapping = {
+	["uranium-ore"] = "stone"
+}
