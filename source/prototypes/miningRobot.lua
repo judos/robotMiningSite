@@ -36,3 +36,30 @@ item.icon = "__robotMiningSite__/graphics/icons/mining-robot.png"
 item.order = "a[robot]-c[mining-robot]"
 item.place_result = "mining-robot"
 data:extend({item})
+
+-- recipe for uranium rubble and processing it to uranium ore
+data:extend({
+  {
+    type = "item",
+    name = "uranium-rubble",
+    icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
+    flags = {"goes-to-main-inventory"},
+    subgroup = "raw-resource",
+    order = "g[uranium-rubble]",
+    stack_size = 50
+  }
+ })
+ data:extend({
+  {
+    type = "recipe",
+    name = "uranium-rubble-cleaning",
+	category = "crafting-with-fluid",
+	energy_required = 5,
+	enabled = false,
+    ingredients = {
+		{"uranium-rubble", 10},
+		{type="fluid", name = "sulfuric-acid", amount = 10}},
+    result = "uranium-ore",
+	result_count = 10
+  }
+})
