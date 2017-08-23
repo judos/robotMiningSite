@@ -44,3 +44,32 @@ data:extend({
 
 addTechnologyUnlocksRecipe("mining-robotics-large","robotMiningSite-large")
 addTechnologyUnlocksRecipe("mining-robotics-large","robotMiningSite-extra")
+
+--Uranium piece
+data:extend({
+  {
+    type = "technology",
+	name = "uranium-rubble-processing",
+	icon = "__robotMiningSite__/graphics/technology/uranium-rubble-processing.png",
+	prerequisites = {"mining-robotics","nuclear-power"},
+	icon_size = 64,
+	effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "uranium-rubble-cleaning"
+      }
+	},
+	unit = {
+	  count = 100,
+	  ingredients = {
+	    {"science-pack-1", 1},
+		{"science-pack-2", 1},
+		{"science-pack-3", 1},
+		{"high-tech-science-pack", 1}
+	  },
+	  time = 30
+	},
+	order = "_mining1",
+  }
+})
