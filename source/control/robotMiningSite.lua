@@ -122,14 +122,17 @@ f.work = function(entity,data,resources)
 
 	local testStack = {name="iron-ore",count=1}
 	local forceName = miningForceForEntity(entity)
-
+	
 	for i=1,robots+5 do
 		local n = math.random(#resources)
 		local position = resources[n].position
-
 		if entity.surface.can_place_entity{name="item-on-ground", position=position, stack=testStack} then
 			local beltsCount = entity.surface.count_entities_filtered{position=position, type="transport-belt"}
 			if beltsCount == 0 then
+				local mineProperties = resources[n].prototype.mineable_properties
+				local pollution = mineProperties.hardness * mineProperties.mining_time * 9
+				entity.surface.pollute(position,pollution)
+				
 				local itemStacksGenerated = mineResource(resources[n])
 				for _,itemStack in pairs(itemStacksGenerated) do
 					if resourceMapping[itemStack["name"]] then
