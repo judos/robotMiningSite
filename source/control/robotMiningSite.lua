@@ -130,7 +130,7 @@ f.work = function(entity,data,resources)
 			local beltsCount = entity.surface.count_entities_filtered{position=position, type="transport-belt"}
 			if beltsCount == 0 then
 				local mineProperties = resources[n].prototype.mineable_properties
-				local pollution = mineProperties.hardness * mineProperties.mining_time * 9
+				local pollution = mineProperties.hardness * mineProperties.mining_time * 4
 				entity.surface.pollute(position,pollution)
 				
 				local itemStacksGenerated = mineResource(resources[n])
