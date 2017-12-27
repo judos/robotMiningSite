@@ -1,4 +1,3 @@
-
 data:extend({
 	{
 		type = "container",
@@ -46,6 +45,7 @@ data:extend({
 		collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
 		selection_box = {{-0.5, -0.8}, {0.5, 0.5}},
 		inventory_size = 48,
+		logistic_slots_count = 12,
 		logistic_mode = "requester",
 		open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
 		close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },

@@ -8,6 +8,7 @@ data:extend({
     flags = {"goes-to-main-inventory"},
     subgroup = "generated",
     order = "zzz",
+	icon_size = 32,
     stack_size = 10000,
   }
 })

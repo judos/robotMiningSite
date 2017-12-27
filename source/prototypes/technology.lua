@@ -5,7 +5,8 @@ data:extend({
     type = "technology",
     name = "mining-robotics",
     icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    prerequisites = {"construction-robotics"},
+    icon_size = 32,
+	prerequisites = {"construction-robotics"},
     unit = {
       count = 100,
       ingredients =
@@ -27,7 +28,8 @@ data:extend({
     type = "technology",
     name = "mining-robotics-large",
     icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    prerequisites = {"mining-robotics"},
+    icon_size = 32,
+	prerequisites = {"mining-robotics"},
     unit = {
       count = 200,
       ingredients =
@@ -51,6 +53,7 @@ data:extend({
     type = "technology",
 	name = "uranium-rubble-processing",
 	icon = "__robotMiningSite__/graphics/technology/uranium-rubble-processing.png",
+	icon_size = 32,
 	prerequisites = {"mining-robotics","nuclear-power"},
 	icon_size = 64,
 	effects =

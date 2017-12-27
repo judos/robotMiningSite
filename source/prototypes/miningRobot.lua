@@ -43,6 +43,7 @@ data:extend({
     type = "item",
     name = "uranium-rubble",
     icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
+	icon_size= 32,
     flags = {"goes-to-main-inventory"},
     subgroup = "raw-resource",
     order = "g[uranium-rubble]",
