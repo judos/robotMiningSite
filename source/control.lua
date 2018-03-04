@@ -45,7 +45,7 @@ function migration()
 	local g = global.robotMiningSite
 	local prevVersion = g.version
 	if not g.version then
-		g.version = "0.5.0"
+		g.version = "0.7.0"
 		speedTechnologyInit()
 		info("Initialised")
 	end
@@ -88,6 +88,6 @@ script.on_event(defines.events.on_robot_pre_mined, function(event)
 	entities_pre_mined(event)
 end)
 
-script.on_event(defines.events.on_preplayer_mined_item, function(event)
+script.on_event(defines.events.on_pre_player_mined_item, function(event)
 	entities_pre_mined(event)
 end)
