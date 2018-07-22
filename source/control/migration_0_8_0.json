@@ -1,0 +1,8 @@
+{
+	"technology":
+	[
+		["mining-robot-speed-1x", "mining-robot-speed-1"],
+		["mining-robot-speed-2x", "mining-robot-speed-2"],
+		["mining-robot-speed-3x", "mining-robot-speed-3"],
+	]
+}

@@ -1,5 +1,5 @@
 
-modVersion = "0.7.0"
+modVersion = "0.8.2"
 modName = "robotMiningSite"
 fullModName = "robotMiningSite"
 

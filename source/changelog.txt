@@ -1,0 +1,37 @@
+---------------------------------------------------------------------------------------------------
+Version 0.7.1
+Date: March 24. 2018
+  Changes:
+    - added support for upgrading mining sites into larger ones
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.0
+Date: May 6. 2018
+
+  Changes:
+    Mod integration:
+      - with bobs logistics installed, mining robots can be upgraded to higher tiers.
+      - tier 1 robots can be build using bobs construction robot recipe (with steel axes replacing construction tool).
+      - construction of mining robot MK2 to MK5 uses materials from bobs mining and bobs plates (using vanilla alternatives if not available)
+
+    Changes:
+      - speed technology is levelled, with levels 1-4 adding 25% to speed each, level 5+ adding 15% per level.
+
+    To do:
+      - add mining productivity benefits.
+      - add support for non-vanilla ores which require fluids to mine (like uranium)
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.1
+Date: May 6. 2018
+
+  Bugfix:
+    - Mining robots of higher tiers acted like construction robots rather then as mining robots.
+    - Required materials for higher tiers of robots are now calculated correctly.
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.2
+Date: July 22. 2018
+
+  Hotfix:
+    - added missing Lua file which enables mining site upgrades
