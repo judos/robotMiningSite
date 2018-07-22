@@ -35,3 +35,10 @@ Date: July 22. 2018
 
   Hotfix:
     - added missing Lua file which enables mining site upgrades
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.3
+Date: to be released
+
+  Bugfix:
+    - fixed an error which caused failing to load the mod when none of the optional dependencies is available
