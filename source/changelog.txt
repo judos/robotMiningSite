@@ -38,7 +38,7 @@ Date: July 22. 2018
 
 ---------------------------------------------------------------------------------------------------
 Version 0.8.3
-Date: to be released
+Date: July 23. 2018
 
   Bugfix:
     - fixed an error which caused failing to load the mod when none of the optional dependencies is available
