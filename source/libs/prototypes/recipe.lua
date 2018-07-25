@@ -170,3 +170,26 @@ function recipeAddIngredient(recipe,ingredientNew)
 	end
 	table.insert(recipe.ingredients,ingredientNew)
 end
+
+function add_ingredient(recipe, item)
+  if data.raw.recipe[recipe] and bobmods.lib.item.get_type(bobmods.lib.item.basic_item(item).name) then
+
+    if data.raw.recipe[recipe].expensive then
+      bobmods.lib.item.add(data.raw.recipe[recipe].expensive.ingredients, bobmods.lib.item.basic_item(item))
+    end
+    if data.raw.recipe[recipe].normal then
+      bobmods.lib.item.add(data.raw.recipe[recipe].normal.ingredients, bobmods.lib.item.basic_item(item))
+    end
+    if data.raw.recipe[recipe].ingredients then
+      bobmods.lib.item.add(data.raw.recipe[recipe].ingredients, bobmods.lib.item.basic_item(item))
+    end
+
+  else
+    if not data.raw.recipe[recipe] then
+      log("Recipe " .. recipe .. " does not exist.")
+    end
+    if not bobmods.lib.item.get_basic_type(bobmods.lib.item.basic_item(item).name) then
+      log("Ingredient " .. bobmods.lib.item.basic_item(item).name .. " does not exist.")
+    end
+  end
+end

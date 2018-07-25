@@ -15,7 +15,7 @@ if mods["boblogistics"] then
   if settings.startup["useBotGrades"].value == true  then
     robotMiningSite.settings.botsmk = true
   else
-    obotMiningSite.settings.botsmk = false
+    robotMiningSite.settings.botsmk = false
   end
   if settings.startup["needPreviousGrade"].value == true  then
     robotMiningSite.settings.botsUpgrade = true

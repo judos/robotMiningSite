@@ -1,4 +1,3 @@
-require "libs.prototypes.recipe"
 -- Entity
 local miningRobot = deepcopy(data.raw["construction-robot"]["construction-robot"])
 miningRobot.name = "mining-robot"

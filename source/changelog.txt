@@ -42,3 +42,12 @@ Date: July 23. 2018
 
   Bugfix:
     - fixed an error which caused failing to load the mod when none of the optional dependencies is available
+    - added a missing lib function
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.4
+Date: July 25. 2018
+
+  Bugfixes:
+    - changed the way required libs are loaded (failsafe)
+    - fixed typo in data.lua

@@ -1,5 +1,3 @@
-require "libs.prototypes.recipe"
-
 if robotMiningSite.settings.botsUpgrade == true then
   add_ingredient("mining-robot-2", {"mining-robot", 1})
   add_ingredient("mining-robot-3", {"mining-robot-2", 1})
