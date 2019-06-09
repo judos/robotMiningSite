@@ -199,7 +199,7 @@ miningSite.premine = function(entity,data,player)
 	-- since the player mines it all items have to be moved
 	if player then
 		-- if playerIndex is set in events table, every item must be moved in this method from the input chests, otherwise items get lost
-		local playerInventory = player.get_inventory(defines.inventory.player_main)
+		local playerInventory = character.get_inventory(defines.inventory.character_main)
 		for _,invToClear in pairs(inventoriesToClear) do
 			if not moveInventoryToInventory(invToClear,playerInventory) then break end
 		end
