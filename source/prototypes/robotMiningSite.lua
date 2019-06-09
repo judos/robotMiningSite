@@ -6,7 +6,6 @@ data:extend({
 		icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
 		icon_size= 32,
 		place_result = "robotMiningSite-new",
-		flags = {"goes-to-quickbar"},
 		subgroup = "logistic-network",
 		order = "c[signal]-b[robotMiningSite]1",
 		category = "crafting",

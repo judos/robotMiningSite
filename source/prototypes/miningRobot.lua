@@ -26,14 +26,14 @@ data:extend({
 
 
 if robotMiningSite.settings.bobs == true then
-  data.raw.recipe["mining-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"steel-axe", 2}}
+  data.raw.recipe["mining-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"steel-plate", 2}}
 else
-  data.raw.recipe["mining-robot"].ingredients ={{"construction-robot", 1}, {"steel-axe", 2}}
+  data.raw.recipe["mining-robot"].ingredients ={{"construction-robot", 1}, {"steel-plate", 2}}
 end
 
-if robotMiningSite.settings.botsmk == true and robotMiningSite.settings.bobs == true then
+if robotMiningSite.settings.botsmk == true then
     if data.raw.item["bob-construction-robot-2"] then
-      local miningRobotMK2 = deepcopy(data.raw["construction-robot"]["bob-construction-robot-2"])
+      local miningRobotMK2 = deepcopy(data.raw["construction-robot"]["mining-robot"])
       miningRobotMK2.name = "mining-robot-2"
       miningRobotMK2.icon = "__robotMiningSite__/graphics/icons/mining-robot-2.png"
       miningRobotMK2.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-2.png"
@@ -54,7 +54,7 @@ if robotMiningSite.settings.botsmk == true and robotMiningSite.settings.bobs == 
         enabled = false,
         ingredients = {},
         result = "mining-robot-2",
-      }
+       },
       })
 
     end
@@ -148,28 +148,32 @@ if robotMiningSite.settings.botsmk == true then
       local item = deepcopy(data.raw["item"]["construction-robot"])
       item.name = "mining-robot-2"
       item.icon = "__robotMiningSite__/graphics/icons/mining-robot-2.png"
-      item.order = "a[robot]-c[mining-robot]"
+	  --item.subgroup = "logistic-network"
+      item.order = "a[robot]-c[mining-robot-2]"
       item.place_result = "mining-robot-2"
       data:extend({item})
 
       local item = deepcopy(data.raw["item"]["construction-robot"])
       item.name = "mining-robot-3"
       item.icon = "__robotMiningSite__/graphics/icons/mining-robot-3.png"
-      item.order = "a[robot]-c[mining-robot]"
+	  --item.subgroup = "logistic-network"
+      item.order = "a[robot]-c[mining-robot-3]"
       item.place_result = "mining-robot-3"
       data:extend({item})
 
       local item = deepcopy(data.raw["item"]["construction-robot"])
       item.name = "mining-robot-4"
       item.icon = "__robotMiningSite__/graphics/icons/mining-robot-4.png"
-      item.order = "a[robot]-c[mining-robot]"
+	  --item.subgroup = "logistic-network"
+      item.order = "a[robot]-c[mining-robot-4]"
       item.place_result = "mining-robot-4"
       data:extend({item})
 
       local item = deepcopy(data.raw["item"]["construction-robot"])
       item.name = "mining-robot-5"
       item.icon = "__robotMiningSite__/graphics/icons/mining-robot-5.png"
-      item.order = "a[robot]-c[mining-robot]"
+	  --item.subgroup = "logistic-network"
+      item.order = "a[robot]-c[mining-robot-5]"
       item.place_result = "mining-robot-5"
       data:extend({item})
 end
@@ -181,7 +185,6 @@ data:extend({
     name = "uranium-rubble",
     icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
 	  icon_size= 32,
-    flags = {"goes-to-main-inventory"},
     subgroup = "raw-resource",
     order = "g[uranium-rubble]",
     stack_size = 50

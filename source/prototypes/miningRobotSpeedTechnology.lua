@@ -11,8 +11,8 @@ data:extend({
 		unit = {
 			count = 100,
 			ingredients = {
-				{"science-pack-1", 2},
-				{"science-pack-2", 1},
+				{"automation-science-pack", 2},
+				{"logistic-science-pack", 1},
 			},
 			time = 30
 		},
@@ -25,12 +25,13 @@ local speed2 = deepcopy(data.raw.technology["mining-robot-speed-1"])
 overwriteContent(speed2,{
 	name = "mining-robot-speed-2",
 	prerequisites = { "mining-robot-speed-1" },
+	effects = {},
 	unit = {
 		count = 150,
 		ingredients = {
-			{"science-pack-1", 2},
-			{"science-pack-2", 2},
-			{"science-pack-3", 1},
+			{"automation-science-pack", 2},
+			{"logistic-science-pack", 2},
+			{"production-science-pack", 1},
 		},
 		time = 30
 	}
@@ -41,78 +42,49 @@ local speed3 = deepcopy(data.raw.technology["mining-robot-speed-2"])
 overwriteContent(speed3,{
 	name = "mining-robot-speed-3",
 	prerequisites = { "mining-robot-speed-2" },
+	effects = {},
 	unit = {
 		count = 200,
 		ingredients = {},
 		time = 30
 	}
 })
-if data.raw.item["logistic-science-pack"] then
-	speed3.unit.ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"logistic-science-pack", 2}
-	}
-else
-	speed3.unit.ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"production-science-pack", 2}
-	}
-end
+speed3.unit.ingredients = {
+	{"automation-science-pack", 2},
+	{"logistic-science-pack", 3},
+	{"production-science-pack", 2},
+	{"utility-science-pack", 1}
+}
 data:extend({speed3})
 
 local speed4 = deepcopy(data.raw.technology["mining-robot-speed-3"])
 overwriteContent(speed4,{
 	name = "mining-robot-speed-4",
 	prerequisites = { "mining-robot-speed-3" },
+	effects = {},
 	unit = {
 		count = 250,
 		ingredients = {},
 		time = 30
 	}
 })
-if data.raw.item["logistic-science-pack"] then
-	speed4.unit.ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"logistic-science-pack", 2},
-		{"high-tech-science-pack", 1}
-	}
-else
-	speed4.unit.ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"production-science-pack", 2},
-		{"high-tech-science-pack", 1}
-	}
-end
+
+speed4.unit.ingredients = {
+	{"automation-science-pack", 2},
+	{"logistic-science-pack", 4},
+	{"production-science-pack", 3},
+	{"utility-science-pack", 2}
+}
 data:extend({speed4})
 
 
-if data.raw.item["logistic-science-pack"] then
-	speed5_ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"logistic-science-pack", 2},
-		{"high-tech-science-pack", 2},
-		{"space-science-pack", 1}
-	}
-else
-	speed5_ingredients = {
-		{"science-pack-1", 2},
-		{"science-pack-2", 2},
-		{"science-pack-3", 2},
-		{"production-science-pack", 2},
-		{"high-tech-science-pack", 2},
-		{"space-science-pack", 1}
-	}
-end
+speed5_ingredients = {
+	{"automation-science-pack", 3},
+	{"logistic-science-pack", 4},
+	{"production-science-pack", 3},
+	{"utility-science-pack", 3},
+	{"space-science-pack", 2}
+}
 
 data:extend({
 	{
@@ -120,7 +92,7 @@ data:extend({
 		name = "mining-robot-speed-5",
 		icon = "__base__/graphics/technology/worker-robots-speed.png",
 		icon_size = 128,
-		effects = {},
+	effects = {},
 		prerequisites = {"mining-robot-speed-4"},
 		unit = {
 			count_formula = "200+(50*2^L)",
