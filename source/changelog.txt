@@ -1,8 +1,51 @@
----------------------------------------------------------------------------------------------------
-Version 0.7.1
-Date: March 24. 2018
+Version 0.9.1
+Date June 09. 2019
+
   Changes:
-    - added support for upgrading mining sites into larger ones
+    -  reworked robot speed technologies
+	-  fixes several bugs
+
+---------------------------------------------------------------------------------------------------
+Version 0.9.0
+Date: April 24. 2019
+
+  Changes:
+    -  corrected the position of higher tier robots in item list.
+	-  Updated to work with Factorio 0.17.x
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.4
+Date: July 25. 2018
+
+  Bugfixes:
+    - changed the way required libs are loaded (failsafe)
+    - fixed typo in data.lua
+
+  Upcoming:
+    - Robot mining benefits from mining productivity bonus (currently testing)
+	
+---------------------------------------------------------------------------------------------------
+Version 0.8.3
+Date: July 23. 2018
+
+  Bugfix:
+    - fixed an error which caused failing to load the mod when none of the optional dependencies is available
+    - added a missing lib function
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.2
+Date: July 22. 2018
+
+  Hotfix:
+    - added missing Lua file which enables mining site upgrades
+
+---------------------------------------------------------------------------------------------------
+Version 0.8.1
+Date: May 6. 2018
+
+  Bugfix:
+    - Mining robots of higher tiers acted like construction robots rather then as mining robots.
+    - Required materials for higher tiers of robots are now calculated correctly.
 
 ---------------------------------------------------------------------------------------------------
 Version 0.8.0
@@ -22,32 +65,8 @@ Date: May 6. 2018
       - add support for non-vanilla ores which require fluids to mine (like uranium)
 
 ---------------------------------------------------------------------------------------------------
-Version 0.8.1
-Date: May 6. 2018
+Version 0.7.1
+Date: March 24. 2018
+  Changes:
+    - added support for upgrading mining sites into larger ones
 
-  Bugfix:
-    - Mining robots of higher tiers acted like construction robots rather then as mining robots.
-    - Required materials for higher tiers of robots are now calculated correctly.
-
----------------------------------------------------------------------------------------------------
-Version 0.8.2
-Date: July 22. 2018
-
-  Hotfix:
-    - added missing Lua file which enables mining site upgrades
-
----------------------------------------------------------------------------------------------------
-Version 0.8.3
-Date: July 23. 2018
-
-  Bugfix:
-    - fixed an error which caused failing to load the mod when none of the optional dependencies is available
-    - added a missing lib function
-
----------------------------------------------------------------------------------------------------
-Version 0.8.4
-Date: July 25. 2018
-
-  Bugfixes:
-    - changed the way required libs are loaded (failsafe)
-    - fixed typo in data.lua
