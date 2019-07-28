@@ -91,8 +91,10 @@ end
 
 if data.raw["mining-tool"]["brass-axe"] then
   add_ingredient("mining-robot-2", {"brass-axe", 2})
+elseif data.raw["item"]["brass-alloy"] then
+  add_ingredient("mining-robot-2", {"brass-alloy", 2})
 else
-  add_ingredient("mining-robot-2", {"steel-axe", 3})
+  add_ingredient("mining-robot-2", {"steel-plate", 3})
 end
 
 if data.raw.item["robot-brain-construction-3"] then
@@ -103,8 +105,10 @@ end
 
 if data.raw["mining-tool"]["brass-axe"] then
   add_ingredient("mining-robot-3", {"cobalt-axe", 2})
+elseif data.raw["item"]["cobalt-plate"] then
+  add_ingredient("mining-robot-3", {"cobalt-plate", 2})
 else
-  add_ingredient("mining-robot-3", {"steel-axe", 4})
+  add_ingredient("mining-robot-3", {"steel-plate", 4})
 end
 
 
@@ -120,6 +124,8 @@ end
 
 if data.raw["mining-tool"]["titanium-axe"] then
   add_ingredient("mining-robot-4", {"titanium-axe", 2})
+elseif data.raw["item"]["titanium-plate"] then
+  add_ingredient("mining-robot-4", {"titanium-plate", 2})
 else
   add_ingredient("mining-robot-4", {"steel-axe", 5})
 end
@@ -161,7 +167,10 @@ end
 
   if data.raw["mining-tool"]["diamond-axe"] then
     add_ingredient("mining-robot-5", {"diamond-axe", 2})
+  elseif data.raw["item"]["gold-plate"] then
+    add_ingredient("mining-robot-5", {"gold-plate", 2})
+	if data.raw["item"]["diamond-5"] then add_ingredient("mining-robot-5", {"ddiamond-5", 2}) end
   else
-    add_ingredient("mining-robot-5", {"steel-axe", 10})
+    add_ingredient("mining-robot-5", {"copper-plate", 10})
   end
 

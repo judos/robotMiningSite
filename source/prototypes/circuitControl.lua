@@ -39,6 +39,6 @@ data:extend({	control })
 local controlOverlay = deepcopy(control)
 controlOverlay.name = "miningSite-control-overlay"
 controlOverlay.selection_box = nil
-controlOverlay.picture_off.width = 0
-controlOverlay.picture_off.height = 0
+controlOverlay.picture_off.width = 1
+controlOverlay.picture_off.height = 1
 data:extend({ controlOverlay })
