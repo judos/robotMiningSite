@@ -15,5 +15,6 @@ capacityRoboportExtra = 1000
 
 -- map certain items gained by robots to yield other items than expected
 resourceMapping = {
-	["uranium-ore"] = "uranium-rubble"
+	["uranium-ore"] = "uranium-rubble",
+	["thorium-ore"] = "thorium-rubble"
 }

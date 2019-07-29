@@ -206,3 +206,35 @@ data:extend({
 	  result_count = 10
   }
 })
+
+
+-- recipe for thorium rubble and processing it to thorium ore
+if data.raw.item["thorium-ore"] then
+data:extend({
+  {
+    type = "item",
+    name = "thorium-rubble",
+    icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
+    icon_size= 32,
+    subgroup = "raw-resource",
+    order = "g[thorium-rubble]",
+    stack_size = 50
+  }
+ })
+ data:extend({
+  {
+    type = "recipe",
+    name = "thorium-rubble-cleaning",
+    category = "crafting-with-fluid",
+    energy_required = 5,
+    enabled = false,
+    ingredients = 
+    {
+      {"thorium-rubble", 10},
+      {type="fluid", name = "sulfuric-acid", amount = 10}
+    },
+    result = "thorium-ore",
+    result_count = 10
+  }
+})
+end

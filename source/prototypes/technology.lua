@@ -49,30 +49,29 @@ addTechnologyUnlocksRecipe("mining-robotics-large","robotMiningSite-extra")
 data:extend({
   {
     type = "technology",
-	name = "uranium-rubble-processing",
-	icon = "__robotMiningSite__/graphics/technology/uranium-rubble-processing.png",
-	prerequisites = {"mining-robotics","nuclear-power"},
-	icon_size = 64,
-	effects =
-    {
-      {
-        type = "unlock-recipe",
-        recipe = "uranium-rubble-cleaning"
-      }
-	},
-	unit = {
-	  count = 100,
-	  ingredients = {
-		{"automation-science-pack", 1},
-		{"logistic-science-pack", 1},
-		{"utility-science-pack", 1},
-		{"chemical-science-pack", 1}
-	  },
-	  time = 30
-	},
-	order = "_mining1",
+  name = "rubble-processing",
+  icon = "__robotMiningSite__/graphics/technology/rubble-processing.png",
+  prerequisites = {"mining-robotics","nuclear-power"},
+  icon_size = 64,
+  effects ={},
+  unit = {
+    count = 100,
+    ingredients = {
+    {"automation-science-pack", 1},
+    {"logistic-science-pack", 1},
+    {"chemical-science-pack", 1},
+    {"utility-science-pack", 1},
+    },
+    time = 30
+  },
+  order = "_mining1",
   }
 })
+
+addTechnologyUnlocksRecipe("rubble-processing","uranium-rubble-cleaning")
+if data.raw.item["thorium-ore"] then
+  addTechnologyUnlocksRecipe("rubble-processing","thorium-rubble-cleaning")
+end
 
 -- Upgraded bots
 if robotMiningSite.settings.botsmk == true and robotMiningSite.settings.bobs == true then
@@ -97,7 +96,7 @@ data:extend({
       {
         {"automation-science-pack", 2},
         {"logistic-science-pack", 2},
-        {"utility-science-pack", 2}
+        {"production-science-pack", 2}
       },
       time = 25
     },
@@ -122,7 +121,7 @@ data:extend({
       {
         {"automation-science-pack", 2},
         {"logistic-science-pack", 2},
-        {"utility-science-pack", 2},
+        {"chemical-science-pack", 2},
         {"production-science-pack", 2}
       },
       time = 30
@@ -148,7 +147,8 @@ data:extend({
       {
         {"automation-science-pack", 2},
         {"logistic-science-pack", 2},
-        {"utility-science-pack", 4},
+        {"chemical-science-pack", 2},
+        {"utility-science-pack", 2},
         {"production-science-pack", 2}
       },
       time = 35
@@ -174,7 +174,8 @@ data:extend({
       {
         {"automation-science-pack", 2},
         {"logistic-science-pack", 4},
-        {"utility-science-pack", 4},
+        {"chemical-science-pack", 2},
+        {"utility-science-pack", 2},
         {"production-science-pack", 2}
       },
       time = 40
