@@ -25,6 +25,15 @@ data:extend({
 })
 
 
+-- Item
+local bot = deepcopy(data.raw["item"]["construction-robot"])
+bot.name = "mining-robot"
+bot.icon = "__robotMiningSite__/graphics/icons/mining-robot.png"
+bot.order = "a[robot]-c[mining-robot]"
+bot.place_result = "mining-robot"
+data:extend({bot})
+
+
 if robotMiningSite.settings.bobs == true then
   data.raw.recipe["mining-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"steel-plate", 2}}
 else
@@ -135,14 +144,6 @@ if robotMiningSite.settings.botsmk == true then
       })
     end
 end
-
--- Item
-local item = deepcopy(data.raw["item"]["construction-robot"])
-item.name = "mining-robot"
-item.icon = "__robotMiningSite__/graphics/icons/mining-robot.png"
-item.order = "a[robot]-c[mining-robot]"
-item.place_result = "mining-robot"
-data:extend({item})
 
 if robotMiningSite.settings.botsmk == true then
       local item = deepcopy(data.raw["item"]["construction-robot"])

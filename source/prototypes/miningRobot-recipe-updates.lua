@@ -169,7 +169,7 @@ end
     add_ingredient("mining-robot-5", {"diamond-axe", 2})
   elseif data.raw["item"]["gold-plate"] then
     add_ingredient("mining-robot-5", {"gold-plate", 2})
-	if data.raw["item"]["diamond-5"] then add_ingredient("mining-robot-5", {"ddiamond-5", 2}) end
+	if data.raw["item"]["diamond-5"] then add_ingredient("mining-robot-5", {"diamond-5", 2}) end
   else
     add_ingredient("mining-robot-5", {"copper-plate", 10})
   end
