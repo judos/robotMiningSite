@@ -6,15 +6,6 @@ data:extend(
     setting_type = "startup",
     default_value = false,
   },
-})
-if mods["boblogistics"] then
-  data:extend({
-    {
-      type = "bool-setting",
-      name = "useBobRobotics",
-      setting_type = "startup",
-      default_value = false,
-    },
     {
       type = "bool-setting",
       name = "useBotGrades",
@@ -24,6 +15,15 @@ if mods["boblogistics"] then
     {
       type = "bool-setting",
       name = "needPreviousGrade",
+      setting_type = "startup",
+      default_value = false,
+    }
+})
+if mods["boblogistics"] then
+  data:extend({
+    {
+      type = "bool-setting",
+      name = "useBobRobotics",
       setting_type = "startup",
       default_value = false,
     }

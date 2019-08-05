@@ -1,4 +1,4 @@
-
+require "libs.prototypes.item"
 require "libs.prototypes.recipe"
 require "libs.prototypes.technology"
 require "libs.prototypes.prototypes"

@@ -6,11 +6,22 @@ data:extend({
 		icon = "__robotMiningSite__/graphics/icons/robotMiningSite.png",
 		icon_size= 32,
 		place_result = "robotMiningSite-new",
-		subgroup = "logistic-network",
-		order = "c[signal]-b[robotMiningSite]1",
+		subgroup = "mining-roboport",
+		order = "a[miningport]-a[robotMiningSite-1]",
 		category = "crafting",
 		stack_size = 50,
 	},
+})
+
+data:extend({
+  {
+    type = "item-entity",
+    name = "mining-item-on-ground",
+    flags = {"placeable-off-grid", "not-on-map"},
+    collision_box = {{-0.14, -0.14}, {0.14, 0.14}},
+    selection_box = {{-0.17, -0.17}, {0.17, 0.17}},
+    minable = {mining_time = 0.025, minable = false}
+  }
 })
 
 -- Recipe

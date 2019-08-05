@@ -1,3 +1,18 @@
+local function robotSpeedUpgrade(lvl)
+	
+	if lvl < 5 then
+		return {
+			type = "nothing",
+			effect_description = {"modifier-description.mining-robot-speed", tostring(40)},	
+		}
+	else
+		return {
+			type = "nothing",
+			effect_description = {"modifier-description.mining-robot-speed", tostring(25)},	
+		}
+	end
+end
+
 data:extend({
 	{
 		type = "technology",
@@ -16,6 +31,7 @@ data:extend({
 			},
 			time = 30
 		},
+		effects = {robotSpeedUpgrade(1)},
 		upgrade = true,
 		order = "_mining1"
 	}
@@ -25,7 +41,7 @@ local speed2 = deepcopy(data.raw.technology["mining-robot-speed-1"])
 overwriteContent(speed2,{
 	name = "mining-robot-speed-2",
 	prerequisites = { "mining-robot-speed-1" },
-	effects = {},
+	effects = {robotSpeedUpgrade(2)},
 	unit = {
 		count = 150,
 		ingredients = {
@@ -42,7 +58,7 @@ local speed3 = deepcopy(data.raw.technology["mining-robot-speed-2"])
 overwriteContent(speed3,{
 	name = "mining-robot-speed-3",
 	prerequisites = { "mining-robot-speed-2" },
-	effects = {},
+	effects = {robotSpeedUpgrade(3)},
 	unit = {
 		count = 200,
 		ingredients = {},
@@ -53,7 +69,7 @@ speed3.unit.ingredients = {
 	{"automation-science-pack", 2},
 	{"logistic-science-pack", 3},
 	{"production-science-pack", 2},
-	{"utility-science-pack", 1}
+	{"chemical-science-pack", 1}
 }
 data:extend({speed3})
 
@@ -61,7 +77,7 @@ local speed4 = deepcopy(data.raw.technology["mining-robot-speed-3"])
 overwriteContent(speed4,{
 	name = "mining-robot-speed-4",
 	prerequisites = { "mining-robot-speed-3" },
-	effects = {},
+	effects = {robotSpeedUpgrade(4)},
 	unit = {
 		count = 250,
 		ingredients = {},
@@ -73,7 +89,7 @@ speed4.unit.ingredients = {
 	{"automation-science-pack", 2},
 	{"logistic-science-pack", 4},
 	{"production-science-pack", 3},
-	{"utility-science-pack", 2}
+	{"chemical-science-pack", 2}
 }
 data:extend({speed4})
 
@@ -82,8 +98,8 @@ speed5_ingredients = {
 	{"automation-science-pack", 3},
 	{"logistic-science-pack", 4},
 	{"production-science-pack", 3},
-	{"utility-science-pack", 3},
-	{"space-science-pack", 2}
+	{"chemical-science-pack", 3},
+	{"utility-science-pack", 2}
 }
 
 data:extend({
@@ -92,10 +108,10 @@ data:extend({
 		name = "mining-robot-speed-5",
 		icon = "__base__/graphics/technology/worker-robots-speed.png",
 		icon_size = 128,
-	effects = {},
+	    effects = {robotSpeedUpgrade(5)},
 		prerequisites = {"mining-robot-speed-4"},
 		unit = {
-			count_formula = "200+(50*2^L)",
+			count_formula = "200+(50*2^(L-4))",
 			ingredients = speed5_ingredients,
 			time = 30
 		},

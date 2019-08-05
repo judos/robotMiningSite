@@ -49,22 +49,22 @@ addTechnologyUnlocksRecipe("mining-robotics-large","robotMiningSite-extra")
 data:extend({
   {
     type = "technology",
-  name = "rubble-processing",
-  icon = "__robotMiningSite__/graphics/technology/rubble-processing.png",
-  prerequisites = {"mining-robotics","nuclear-power"},
-  icon_size = 64,
-  effects ={},
-  unit = {
-    count = 100,
-    ingredients = {
-    {"automation-science-pack", 1},
-    {"logistic-science-pack", 1},
-    {"chemical-science-pack", 1},
-    {"utility-science-pack", 1},
-    },
-    time = 30
-  },
-  order = "_mining1",
+	name = "rubble-processing",
+	icon = "__robotMiningSite__/graphics/technology/rubble-processing.png",
+	prerequisites = {"mining-robotics","nuclear-power"},
+	icon_size = 64,
+	effects ={},
+	unit = {
+	  count = 100,
+	  ingredients = {
+		{"automation-science-pack", 1},
+		{"logistic-science-pack", 1},
+		{"chemical-science-pack", 1},
+		{"utility-science-pack", 1},
+	  },
+	  time = 30
+	},
+	order = "_mining1",
   }
 })
 
@@ -74,114 +74,120 @@ if data.raw.item["thorium-ore"] then
 end
 
 -- Upgraded bots
-if robotMiningSite.settings.botsmk == true and robotMiningSite.settings.bobs == true then
+if robotMiningSite.settings.botsmk == true then
+	data:extend({
+	  {
+		type = "technology",
+		name = "mining-robotics-2",
+		icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
+		icon_size = 64,
+		effects =
+		{
+		  {
+		  type = "unlock-recipe",
+		  recipe = "mining-robot-2"
+		  }
+		},
+		unit = {
+		  count = 100,
+		  ingredients =
+		  {
+			{"automation-science-pack", 2},
+			{"logistic-science-pack", 2},
+			{"production-science-pack", 2}
+		  },
+		  time = 25
+		},
+		order = "_mining3",
+	  },
+	  {
+		type = "technology",
+		name = "mining-robotics-3",
+		icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
+		icon_size = 64,
+		effects =
+		{
+		  {
+		  type = "unlock-recipe",
+		  recipe = "mining-robot-3"
+		  }
+		},
+		unit = {
+		  count = 100,
+		  ingredients =
+		  {
+			{"automation-science-pack", 2},
+			{"logistic-science-pack", 2},
+			{"chemical-science-pack", 2},
+			{"production-science-pack", 2}
+		  },
+		  time = 30
+		},
+		order = "_mining4",
+	  },
+	  {
+		type = "technology",
+		name = "mining-robotics-4",
+		icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
+		icon_size = 64,
+		effects =
+		{
+		  {
+		  type = "unlock-recipe",
+		  recipe = "mining-robot-4"
+		  }
+		},
+		unit = {
+		  count = 100,
+		  ingredients =
+		  {
+			{"automation-science-pack", 2},
+			{"logistic-science-pack", 2},
+			{"chemical-science-pack", 2},
+			{"utility-science-pack", 2},
+			{"production-science-pack", 2}
+		  },
+		  time = 35
+		},
+		order = "_mining5",
+	  },
+	  {
+		type = "technology",
+		name = "mining-robotics-5",
+		icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
+		icon_size = 64,
+		effects =
+		{
+		  {
+		  type = "unlock-recipe",
+		  recipe = "mining-robot-5"
+		  }
+		},
+		unit = {
+		  count = 150,
+		  ingredients =
+		  {
+			{"automation-science-pack", 2},
+			{"logistic-science-pack", 4},
+			{"chemical-science-pack", 2},
+			{"utility-science-pack", 2},
+			{"production-science-pack", 2}
+		  },
+		  time = 40
+		},
+		order = "_mining6",
+	  },
+	})
 
-data:extend({
-  {
-    type = "technology",
-    name = "mining-robotics-2",
-    icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    icon_size = 64,
-    effects =
-    {
-      {
-      type = "unlock-recipe",
-      recipe = "mining-robot-2"
-      }
-    },
-    prerequisites = {"mining-robotics","bob-robots-1"},
-    unit = {
-      count = 100,
-      ingredients =
-      {
-        {"automation-science-pack", 2},
-        {"logistic-science-pack", 2},
-        {"production-science-pack", 2}
-      },
-      time = 25
-    },
-    order = "_mining3",
-  },
-  {
-    type = "technology",
-    name = "mining-robotics-3",
-    icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    icon_size = 64,
-    effects =
-    {
-      {
-      type = "unlock-recipe",
-      recipe = "mining-robot-3"
-      }
-    },
-    prerequisites = {"mining-robotics-2","bob-robots-2"},
-    unit = {
-      count = 100,
-      ingredients =
-      {
-        {"automation-science-pack", 2},
-        {"logistic-science-pack", 2},
-        {"chemical-science-pack", 2},
-        {"production-science-pack", 2}
-      },
-      time = 30
-    },
-    order = "_mining4",
-  },
-  {
-    type = "technology",
-    name = "mining-robotics-4",
-    icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    icon_size = 64,
-    effects =
-    {
-      {
-      type = "unlock-recipe",
-      recipe = "mining-robot-4"
-      }
-    },
-    prerequisites = {"mining-robotics-3","bob-robots-3"},
-    unit = {
-      count = 100,
-      ingredients =
-      {
-        {"automation-science-pack", 2},
-        {"logistic-science-pack", 2},
-        {"chemical-science-pack", 2},
-        {"utility-science-pack", 2},
-        {"production-science-pack", 2}
-      },
-      time = 35
-    },
-    order = "_mining5",
-  },
-  {
-    type = "technology",
-    name = "mining-robotics-5",
-    icon = "__robotMiningSite__/graphics/technology/mining-robotics.png",
-    icon_size = 64,
-    effects =
-    {
-      {
-      type = "unlock-recipe",
-      recipe = "mining-robot-5"
-      }
-    },
-    prerequisites = {"mining-robotics-4","bob-robots-4"},
-    unit = {
-      count = 150,
-      ingredients =
-      {
-        {"automation-science-pack", 2},
-        {"logistic-science-pack", 4},
-        {"chemical-science-pack", 2},
-        {"utility-science-pack", 2},
-        {"production-science-pack", 2}
-      },
-      time = 40
-    },
-    order = "_mining6",
-  },
-
-})
-end
+	if robotMiningSite.settings.bobs == true then
+		data.raw.technology["mining-robotics-2"].prerequisites = {"mining-robotics","bob-robots-1"}
+		data.raw.technology["mining-robotics-3"].prerequisites = {"mining-robotics-2","bob-robots-2"}
+		data.raw.technology["mining-robotics-4"].prerequisites = {"mining-robotics-3","bob-robots-3"}
+		data.raw.technology["mining-robotics-5"].prerequisites = {"mining-robotics-4","bob-robots-4"}
+	else
+		data.raw.technology["mining-robotics-2"].prerequisites = {"mining-robotics"}
+		data.raw.technology["mining-robotics-3"].prerequisites = {"mining-robotics-2"}
+		data.raw.technology["mining-robotics-4"].prerequisites = {"mining-robotics-3"}
+		data.raw.technology["mining-robotics-5"].prerequisites = {"mining-robotics-4"}
+	end
+end	
