@@ -34,7 +34,7 @@ data:extend({
       {
         {"automation-science-pack", 2},
         {"logistic-science-pack", 2},
-		{"utility-science-pack", 2}
+	{"production-science-pack", 2}
       },
       time = 20
     },
