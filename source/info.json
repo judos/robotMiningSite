@@ -1,10 +1,10 @@
 {
 	"name": "robotMiningSite",
-	"version": "0.9.6",
+	"version": "0.10.0",
 	"title": "Robot Mining Site",
 	"author": "judos & Cordina",
 	"description": "Adds mining robots and a robot mining site which can be configured to mine nearby resources",
-	"dependencies": ["base >= 0.17.50", "? boblogistics >= 0.17.0", "? bobmining >= 0.17.0", "? bobplates >= 0.17.0"],
+	"dependencies": ["base >= 0.18", "? boblogistics >= 0.17.0", "? bobmining >= 0.17.0", "? bobplates >= 0.17.0"],
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=23521",
-	"factorio_version": "0.17"
+	"factorio_version": "0.18"
 }
