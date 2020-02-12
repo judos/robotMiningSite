@@ -214,9 +214,10 @@ miningrobot_sparks = {
 local miningRobot = deepcopy(data.raw["construction-robot"]["construction-robot"])
 miningRobot.name = "mining-robot"
 miningRobot.icon = "__robotMiningSite__/graphics/icons/mining-robot.png"
-miningRobot.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot.png"
-miningRobot.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot.png"
-miningRobot.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working.png"
+miningRobot.icon_size = 64
+--miningRobot.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot.png"
+--miningRobot.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot.png"
+--miningRobot.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working.png"
 
 miningRobot.max_energy = "3MJ" --double of construction robots
 miningRobot.energy_per_tick = "0.1kJ" --double of construction robots
@@ -249,9 +250,9 @@ if robotMiningSite.settings.botsmk == true then
       local miningRobotMK2 = deepcopy(data.raw["construction-robot"]["mining-robot"])
       miningRobotMK2.name = "mining-robot-2"
       miningRobotMK2.icon = "__robotMiningSite__/graphics/icons/mining-robot-2.png"
-      miningRobotMK2.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-2.png"
-      miningRobotMK2.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-2.png"
-      miningRobotMK2.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-2.png"
+--      miningRobotMK2.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-2.png"
+--      miningRobotMK2.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-2.png"
+--      miningRobotMK2.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-2.png"
       miningRobotMK2.max_energy = "4500kJ"
       miningRobotMK2.energy_per_tick = "120J"
       miningRobotMK2.energy_per_move = "1.5kJ"
@@ -278,9 +279,9 @@ if robotMiningSite.settings.botsmk == true then
       local miningRobotMK3 = deepcopy(data.raw["construction-robot"]["mining-robot-2"])
       miningRobotMK3.name = "mining-robot-3"
       miningRobotMK3.icon = "__robotMiningSite__/graphics/icons/mining-robot-3.png"
-      miningRobotMK3.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-3.png"
-      miningRobotMK3.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-3.png"
-      miningRobotMK3.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-3.png"
+--      miningRobotMK3.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-3.png"
+--      miningRobotMK3.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-3.png"
+--      miningRobotMK3.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-3.png"
       miningRobotMK3.max_energy = "6000kJ"
       miningRobotMK3.energy_per_tick = "150J"
       miningRobotMK3.energy_per_move = "15kJ"
@@ -306,9 +307,9 @@ if robotMiningSite.settings.botsmk == true then
       local miningRobotMK4 = deepcopy(data.raw["construction-robot"]["mining-robot-3"])
       miningRobotMK4.name = "mining-robot-4"
       miningRobotMK4.icon = "__robotMiningSite__/graphics/icons/mining-robot-4.png"
-      miningRobotMK4.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-4.png"
-      miningRobotMK4.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-4.png"
-      miningRobotMK4.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-4.png"
+--      miningRobotMK4.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-4.png"
+--      miningRobotMK4.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-4.png"
+--      miningRobotMK4.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-4.png"
       miningRobotMK4.max_energy = "7500kJ"
       miningRobotMK4.energy_per_tick = "160J"
       miningRobotMK4.energy_per_move = "15kJ"
@@ -334,17 +335,17 @@ if robotMiningSite.settings.botsmk == true then
       local miningRobotMK5 = deepcopy(data.raw["construction-robot"]["mining-robot-4"])
       miningRobotMK5.name = "mining-robot-5"
       miningRobotMK5.icon = "__robotMiningSite__/graphics/icons/mining-robot-5.png"
-      miningRobotMK5.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-5.png"
-      miningRobotMK5.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-5.png"
-      miningRobotMK5.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-5.png"
+--      miningRobotMK5.idle.filename = "__robotMiningSite__/graphics/entity/mining-robot-5.png"
+--      miningRobotMK5.in_motion.filename = "__robotMiningSite__/graphics/entity/mining-robot-5.png"
+--      miningRobotMK5.working.filename = "__robotMiningSite__/graphics/entity/mining-robot-working-5.png"
       miningRobotMK5.max_energy = "1500kJ"
       miningRobotMK4.energy_per_tick = "0J"
       miningRobotMK4.energy_per_move = "0J"
       miningRobotMK5.minable.result = "mining-robot-5"
       miningRobotMK5.order = "a[robot]-a[mining-robot-5]"
-      miningRobotMK4.idle = miningrobot_idle(5)
-      miningRobotMK4.in_motion = miningrobot_in_motion(5)
-      miningRobotMK4.working = miningrobot_working(5)
+      miningRobotMK5.idle = miningrobot_idle(5)
+      miningRobotMK5.in_motion = miningrobot_in_motion(5)
+      miningRobotMK5.working = miningrobot_working(5)
 	  data:extend({miningRobotMK5})
 
       data:extend({
@@ -362,6 +363,7 @@ end
 local item = deepcopy(data.raw["item"]["construction-robot"])
 item.name = "mining-robot"
 item.icon = "__robotMiningSite__/graphics/icons/mining-robot.png"
+item.icon_size = 64
 item.order = "a[robot]-a[mining-robot-1]"
 item.subgroup = "mining-robots"
 item.place_result = "mining-robot"
@@ -403,7 +405,7 @@ data:extend({
     type = "item",
     name = "uranium-rubble",
     icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
-	  icon_size= 32,
+	icon_size = 64,
     subgroup = "raw-resource",
     order = "g[uranium-rubble]",
     stack_size = 50
@@ -433,7 +435,7 @@ data:extend({
     type = "item",
     name = "thorium-rubble",
     icon = "__robotMiningSite__/graphics/icons/uranium-rubble.png",
-	  icon_size= 32,
+	  icon_size = 64,
     subgroup = "raw-resource",
     order = "g[thorium-rubble]",
     stack_size = 50

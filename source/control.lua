@@ -29,7 +29,7 @@ local robotMiningSiteNameExtra = "robotMiningSite-extra"
 ---------------------------------------------------
 -- Loading
 ---------------------------------------------------
-script.on_init(function()
+--[[script.on_init(function()
 	migration()
 end)
 
@@ -46,7 +46,7 @@ function migration()
 	local g = global.robotMiningSite
 	local prevVersion = g.version
 	if not g.version then
-		g.version = "0.7.0"
+		g.version = "0.10.0"
 		speedTechnologyInit()
 		info("Initialised")
 	end
@@ -63,6 +63,33 @@ function migration()
 		info("Previous version: "..tostring(prevVersion).." migrated to "..g.version)
 	end
 end
+]]
+script.on_init(function()
+	init_globals()
+end)
+
+script.on_load(function()
+end)
+
+local function on_configuration_change(_config_data)
+	init_globals()
+	local mod_changes = config_data["mod_changes"]
+	if mod_changes and mod_changes["robotMiningSite"] then
+		if not mod_changes["robotMiningSite"]["old_version"] then
+			speeTechnologyInit()
+			info("Initialized")
+		end
+		local ver = mod_changes["robotMiningSite"]["old_version"]
+		local ver_parts = string.gmatch(ver, "%d+")
+		local ver_rel, ver_mjr, ver_mnr = tonumber(ver_parts()), tonumber(ver_parts()), tonumber(ver_parts())
+		if ver_rel == 0 and ver_mjr < 2 then migration_0_2_0() end
+		if ver_rel == 0 and ver_mjr == 2 and ver_mnr < 3 then migration_0_2_3() end
+		if ver_rel == 0 and ver_mjr < 3 then migration_0_3_0() end
+		if (ver_rel == 0 and ver_mjr < 4) or (ver_rel == 0 and ver_mjr == 4 and ver_mnr < 1) then migration_0_4_1() end
+	end
+end
+
+
 
 ---------------------------------------------------
 -- Tick

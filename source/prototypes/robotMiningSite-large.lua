@@ -3,7 +3,7 @@ local largeItem = deepcopy(data.raw.item.robotMiningSite)
 overwriteContent(largeItem, {
 	name = "robotMiningSite-large",
 	icon = "__robotMiningSite__/graphics/icons/robotMiningSite-large.png",
-	icon_size= 32,
+	icon_size = 64,
 	place_result = "robotMiningSite-large",
 	order = "b[miningport]-a[robotMiningSite-2]"
 })
@@ -13,7 +13,7 @@ local extraItem = deepcopy(data.raw.item.robotMiningSite)
 overwriteContent(extraItem, {
 	name = "robotMiningSite-extra",
 	icon = "__robotMiningSite__/graphics/icons/robotMiningSite-extra.png",
-	icon_size= 32,
+	icon_size = 64,
 	place_result = "robotMiningSite-extra",
 	order = "b[miningport]-a[robotMiningSite-3]"
 })
