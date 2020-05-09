@@ -37,3 +37,17 @@ function formatWith(formatStr,parameters)
 	until tag == nil or before == formatStr
 	return formatStr
 end
+
+local format = string.format
+
+-- converts arbitrary version string X.Y.Z into xx.yy.zz for comparison
+-- Parameters: string in format X.Y.Z
+-- Returns: string in format xx.yy.zz
+function format_version(version_string)
+  if version_string then
+    local X, Y, Z = version_string:match("(%d+).(%d+).(%d+)")
+    if tonumber(X) and tonumber(Y) and tonumber(Z) then
+      return format("%02d.%02d.%02d", X, Y, Z)
+    end
+  end
+end

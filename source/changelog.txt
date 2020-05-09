@@ -1,8 +1,23 @@
+Version 0.10.2
+Date May 9. 2020
+
+  Fixes:
+	-  Fixed issue which made the game crash when adding this mod to a new save file where it previously never existed.
+---------------------------------------------------------------------------------------------------
+Version 0.10.1
+Date March 26. 2020
+
+  Fixes:
+	- Fixed graphics bug introduced in Factorio 0.18.6
+
+  Known issues: Game may crash when starting a new game with this mod active. I can be added without issues after initial startup.
+---------------------------------------------------------------------------------------------------
 Version 0.10.0
 Date February 2. 2020
 
   Added support for Factorio 0.18
 
+  Known issues: Game may crash when starting a new game with this mod active. I can be added without issues after initial startup.
 ---------------------------------------------------------------------------------------------------
 Version 0.9.6
 Date August 3. 2019
