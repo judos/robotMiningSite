@@ -1,3 +1,9 @@
+Version 0.11.0
+Date dec 28. 2021
+
+  Fixes:
+	-  Updated recipes to match new Bob's Logistics.
+---------------------------------------------------------------------------------------------------
 Version 0.10.2
 Date May 9. 2020
 
